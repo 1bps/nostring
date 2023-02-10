@@ -18,11 +18,41 @@
       </article>
       <aside>
         <div class="action">
-          <NostringButton>Comment</NostringButton>
-          <NostringButton>Repost</NostringButton>
-          <NostringButton>Like</NostringButton>
-          <NostringButton>Pay</NostringButton>
-          <NostringButton>Menu</NostringButton>
+          <NostringButton round type="tertiary">
+            <template #icon>
+              <NostringIcon>
+                <ChatboxOutline />
+              </NostringIcon>
+            </template>
+          </NostringButton>
+          <NostringButton round type="tertiary">
+            <template #icon>
+              <NostringIcon>
+                <RepeatOutline />
+              </NostringIcon>
+            </template>
+          </NostringButton>
+          <NostringButton round type="tertiary">
+            <template #icon>
+              <NostringIcon>
+                <ThumbsUpOutline />
+              </NostringIcon>
+            </template>
+          </NostringButton>
+          <NostringButton round type="tertiary">
+            <template #icon>
+              <NostringIcon>
+                <FlashOutline />
+              </NostringIcon>
+            </template>
+          </NostringButton>
+          <NostringButton round type="tertiary">
+            <template #icon>
+              <NostringIcon>
+                <EllipsisHorizontalOutline />
+              </NostringIcon>
+            </template>
+          </NostringButton>
         </div>
       </aside>
     </div>
@@ -30,6 +60,13 @@
 </template>
 
 <script setup lang="ts">
+import {
+  ChatboxOutline,
+  RepeatOutline,
+  ThumbsUpOutline,
+  FlashOutline,
+  EllipsisHorizontalOutline
+} from "@vicons/ionicons5";
 interface Props {
   mini?: boolean;
   note: Object;
@@ -75,7 +112,9 @@ const props = withDefaults(defineProps<Props>(), {
       .action {
         display: flex;
         gap: 3px;
-        justify-content: space-around;
+        justify-content: space-between;
+        margin-left: -15px;
+        /* 15px of button padding - 3px of gap */
       }
     }
   }

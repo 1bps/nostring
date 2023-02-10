@@ -15,7 +15,27 @@
             <Avatar :image-url="profile.avatar" />
           </div>
           <div class="actions">
-            <NostringButton round>Chat</NostringButton>
+            <NostringButton round>
+              <template #icon>
+                <NostringIcon>
+                  <EllipsisHorizontalOutline />
+                </NostringIcon>
+              </template>
+            </NostringButton>
+            <NostringButton round>
+              <template #icon>
+                <NostringIcon>
+                  <FlashOutline />
+                </NostringIcon>
+              </template>
+            </NostringButton>
+            <NostringButton round>
+              <template #icon>
+                <NostringIcon>
+                  <MailOutline />
+                </NostringIcon>
+              </template>
+            </NostringButton>
             <NostringButton round primary type="primary">Follow</NostringButton>
           </div>
         </NostringSpace>
@@ -31,6 +51,12 @@
 </template>
 
 <script setup lang="ts">
+import {
+  FlashOutline,
+  MailOutline,
+  EllipsisHorizontalOutline
+} from "@vicons/ionicons5";
+
 interface Props {
   mini?: boolean;
   profile: Object;

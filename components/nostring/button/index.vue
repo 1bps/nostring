@@ -3,6 +3,7 @@
     'ns-button-round': round,
     'ns-primary': primary,
   }, `ns-button-${type}`]">
+    <slot name="icon"></slot>
     <span class="ns-button-content">
       <slot>{{ label }} </slot>
     </span>
@@ -55,6 +56,10 @@ const props = withDefaults(defineProps<Props>(), {
   }
 
   &.ns-button-default {}
+
+  &.ns-button-tertiary {
+    --text-color: rgba(255, 255, 255, .33)
+  }
 
   &.ns-button-primary {
     --text-color: rgba(255, 255, 255, .85);
