@@ -1,4 +1,6 @@
-# nostr-client
+# Nostring
+
+A blue-bird-like Nostr client. It is planned to fully implement the protocol and adapt to the mobile. Also provides PWA.
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
