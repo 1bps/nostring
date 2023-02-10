@@ -20,6 +20,9 @@
         <div class="action">
           <NostringButton>Comment</NostringButton>
           <NostringButton>Repost</NostringButton>
+          <NostringButton>Like</NostringButton>
+          <NostringButton>Pay</NostringButton>
+          <NostringButton>Menu</NostringButton>
         </div>
       </aside>
     </div>

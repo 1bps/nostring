@@ -15,8 +15,8 @@
             <Avatar :image-url="profile.avatar" />
           </div>
           <div class="actions">
-            <NostringButton>Chat</NostringButton>
-            <NostringButton>Follow</NostringButton>
+            <NostringButton round>Chat</NostringButton>
+            <NostringButton round primary type="primary">Follow</NostringButton>
           </div>
         </NostringSpace>
         <NameDisplay header>{{

@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="space"
-    :class="{
-      vertical,
-    }"
-  >
+  <div class="ns-space" :class="{
+    'ns-vertical': vertical
+  }">
     <slot>{{ content }} </slot>
   </div>
 </template>
@@ -22,10 +19,11 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <style lang="scss" scope>
-.space {
+.ns-space {
   display: flex;
 }
-.vertical {
+
+.ns-vertical {
   flex-direction: column;
 }
 </style>
