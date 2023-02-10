@@ -9,7 +9,7 @@
           }}</NameDisplay>
           <Name>{{ note.profile.username }}</Name>
         </div>
-        <time>{{ note.createdAt }}</time>
+        <NostringTime :time="note.createdAt" relative />
       </header>
       <article>
         <div class="text">{{ note.content }}</div>
