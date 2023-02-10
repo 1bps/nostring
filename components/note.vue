@@ -5,9 +5,9 @@
       <header>
         <div class="id">
           <NameDisplay>{{
-            note.profile.displayName || note.profile.username
+            note.profile.displayName || note.profile.username || note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
-          <Name>{{ note.profile.username }}</Name>
+          <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
         </div>
         <NostringTime :time="note.createdAt" relative />
       </header>
@@ -55,16 +55,19 @@ const props = withDefaults(defineProps<Props>(), {
     flex-direction: column;
 
     gap: 5px;
+
     header {
       display: flex;
       gap: 4px;
+
       .id {
         display: flex;
         gap: 3px;
       }
     }
-    article {
-    }
+
+    article {}
+
     aside {
       .action {
         display: flex;
