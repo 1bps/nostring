@@ -16,7 +16,7 @@ const profile = (pubkey: string): Object => {
         cached = reactive({ pubkey: pubkey });
         profileCache[pubkey] = cached;
 
-        const relay = relayInit("wss://relay.snort.social");
+        const relay = relayInit("wss://relay.damus.io");
         if (process.client) {
             relay.connect().then(() => {
                 relay.on("connect", () => {

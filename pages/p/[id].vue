@@ -48,7 +48,7 @@ const hex = ref<string>("");
 const profile: any = datasource.profile(hex.value);
 const notes = ref<any[]>([]);
 
-const relay = relayInit("wss://relay.snort.social");
+const relay = relayInit("wss://relay.damus.io");
 
 if (process.client) {
   await relay.connect();

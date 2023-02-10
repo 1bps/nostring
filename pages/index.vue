@@ -22,7 +22,7 @@ import note from "@/composables/model/note";
 
 const notes = ref<any[]>([]);
 
-const relay = relayInit("wss://relay.snort.social");
+const relay = relayInit("wss://relay.damus.io");
 if (process.client) {
   await relay.connect();
 
