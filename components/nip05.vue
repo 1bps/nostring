@@ -39,7 +39,7 @@ const verifiedWithUsername = computed(() =>
 
 <style lang="scss">
 .nip05-verified {
-    --text-color: #105795;
+    --text-color: #105795 !important;
 
     &.username-verified {
         color: var(--bg-color);
@@ -64,10 +64,11 @@ const verifiedWithUsername = computed(() =>
 }
 
 .nip05-fake {
-    --text-color: #952810;
+    --text-color: #952810 !important;
+    text-decoration-line: line-through;
 }
 
 .nip05-fail {
-    --text-color: #956410;
+    --text-color: #956410 !important;
 }
 </style>
