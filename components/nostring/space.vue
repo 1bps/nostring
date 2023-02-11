@@ -14,13 +14,12 @@ interface Props {
   content?: string;
   vertical?: boolean;
   gap?: number;
-  justify: string
+  justify?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   vertial: false,
-  content: "",
-  justify: "initial",
+  content: ""
 });
 </script>
 
