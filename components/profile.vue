@@ -42,7 +42,10 @@
         <NameDisplay header>{{
           profile.displayName || profile.username || profile.pubkey.substr(0, 12)
         }}</NameDisplay>
-        <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
+        <NostringSpace gap="0">
+          <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
+          <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" />
+        </NostringSpace>
       </div>
     </header>
     <div class="bio">{{ profile.bio }}</div>
@@ -57,6 +60,7 @@ import {
   FlashOutline,
   MailOutline,
   EllipsisHorizontalOutline,
+  LinkOutline,
 } from "@vicons/ionicons5";
 
 interface Props {

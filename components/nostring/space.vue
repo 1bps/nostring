@@ -2,7 +2,7 @@
   <div class="ns-space" :class="{
     'ns-vertical': vertical
   }" :style="{
-  gap: gap ? `${gap}px` : undefined,
+  gap: gap? `${gap}px` : undefined,
   justifyContent: justify
 }">
     <slot>{{ content }} </slot>
@@ -13,13 +13,13 @@
 interface Props {
   content?: string;
   vertical?: boolean;
-  gap?: number;
+  gap?: string;
   justify?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   vertial: false,
-  content: ""
+  content: "",
 });
 </script>
 

@@ -4,6 +4,7 @@
 
 <style lang="scss">
 :root {
+  --bg-color: #000;
   --text-color: rgba(255, 255, 255, .667);
   --text-color-primary: rgba(255, 255, 255, .833);
   --text-color-tertiary: rgba(255, 255, 255, .333);
@@ -20,7 +21,7 @@ body {
 
 body {
   margin: 0px;
-  background-color: #000;
+  background-color: var(--bg-color);
   scrollbar-color: #666 #333;
   color: var(--text-color);
 }

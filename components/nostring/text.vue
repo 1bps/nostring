@@ -39,11 +39,11 @@ const props = withDefaults(defineProps<Props>(), {
     }
 
     &.ns-text-primary {
-        color: var(--text-color-primary);
+        --text-color: var(--text-color-primary);
     }
 
     &.ns-text-tertiary {
-        color: var(--text-color-tertiary);
+        --text-color: var(--text-color-tertiary);
     }
 }
 </style>
