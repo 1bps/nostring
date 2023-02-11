@@ -1,8 +1,8 @@
 <template>
-  <span>
+  <NostringText type="tertiary">
     <slot name="mention">@</slot>
     <slot>{{ value }}</slot>
-  </span>
+  </NostringText>
 </template>
 
 <script setup lang="ts">

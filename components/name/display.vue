@@ -1,7 +1,7 @@
 <template>
-  <span class="name-display" :class="{ header }">
+  <NostringText class="name-display" :class="{ header }" type="primary">
     <slot>{{ value }}</slot>
-  </span>
+  </NostringText>
 </template>
 
 <script setup lang="ts">
@@ -19,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 <style lang="scss">
 .name-display {
   font-weight: bold;
+
   &.header {
     font-size: 1.667rem;
   }

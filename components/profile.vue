@@ -46,7 +46,9 @@
       </div>
     </header>
     <div>{{ profile.bio }}</div>
-    <div>0 Following 0 Follower</div>
+    <div>0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
+      </NostringText>
+    </div>
   </div>
 </template>
 

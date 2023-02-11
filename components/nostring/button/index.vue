@@ -28,8 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style lang="scss">
 .ns-button {
-  --text-color: rgba(255, 255, 255, .85);
-  --bg-color: transparent;
+  --button-text-color: var(--text-color);
+  --button-bg-color: transparent;
 
   margin: 0;
   height: 32px;
@@ -48,22 +48,23 @@ const props = withDefaults(defineProps<Props>(), {
   text-decoration: none;
   user-select: none;
 
-  color: var(--text-color);
-  background-color: var(--bg-color);
+  color: var(--button-text-color);
+  background-color: var(--button-bg-color);
 
   &.ns-button-round {
     border-radius: 16px;
+    padding: 0 20px;
   }
 
   &.ns-button-default {}
 
   &.ns-button-tertiary {
-    --text-color: rgba(255, 255, 255, .33)
+    --button-text-color: var(--text-color-tertiary);
   }
 
   &.ns-button-primary {
-    --text-color: rgba(255, 255, 255, .85);
-    --bg-color: #105795;
+    --button-text-color: var(--text-color-primary);
+    --button-bg-color: #105795;
   }
 
   &.ns-button-warning {}

@@ -9,7 +9,9 @@
           }}</NameDisplay>
           <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
         </div>
-        <NostringTime :time="note.createdAt" relative />
+        <NostringText>
+          <NostringTime :time="note.createdAt" relative />
+        </NostringText>
       </header>
       <article>
         <div class="text">{{ note.content }}</div>
