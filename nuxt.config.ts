@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     app: {
         head: {
             style: [{
-                children: 'body {backdround-color: #000}',
+                children: 'body {background-color: #000}',
                 type: 'text/css',
             }]
         }
