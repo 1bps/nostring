@@ -20,35 +20,35 @@
       </article>
       <aside>
         <div class="action">
-          <NostringButton round type="tertiary">
+          <NostringButton text round type="tertiary">
             <template #icon>
               <NostringIcon>
                 <ChatboxOutline />
               </NostringIcon>
             </template>
           </NostringButton>
-          <NostringButton round type="tertiary">
+          <NostringButton text round type="tertiary">
             <template #icon>
               <NostringIcon>
                 <RepeatOutline />
               </NostringIcon>
             </template>
           </NostringButton>
-          <NostringButton round type="tertiary">
+          <NostringButton text round type="tertiary">
             <template #icon>
               <NostringIcon>
                 <ThumbsUpOutline />
               </NostringIcon>
             </template>
           </NostringButton>
-          <NostringButton round type="tertiary">
+          <NostringButton text round type="tertiary">
             <template #icon>
               <NostringIcon>
                 <FlashOutline />
               </NostringIcon>
             </template>
           </NostringButton>
-          <NostringButton round type="tertiary">
+          <NostringButton text round type="tertiary">
             <template #icon>
               <NostringIcon>
                 <EllipsisHorizontalOutline />

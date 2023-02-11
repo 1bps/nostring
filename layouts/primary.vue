@@ -6,13 +6,38 @@
       </div>
       <aside class="sidebar">
         <nav>
-          <span>Login</span>
-          <span>Register</span>
+          <NostringCard>
+            <NostringSpace vertical :gap="10">
+              <NostringText type="primary">Start Nostring</NostringText>
+              <NostringButton round size="l">Login with npub/nsec</NostringButton>
+              <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
+              <NostringButton type="primary" round size="l">Generate new nsec</NostringButton>
+            </NostringSpace>
+          </NostringCard>
         </nav>
+
+        <footer>
+          <NostringSpace justify="center">
+            <NostringText type="tertiary" size="s">
+              Powered by Nostring
+            </NostringText>
+            <NostringText type="tertiary" size="s">
+              <NostringIcon>
+                <LogoGithub />
+              </NostringIcon>
+            </NostringText>
+          </NostringSpace>
+        </footer>
       </aside>
     </ClientOnly>
   </NuxtLayout>
 </template>
+
+<script setup lang="ts">
+import {
+  LogoGithub
+} from "@vicons/ionicons5";
+</script>
 
 <style lang="scss">
 .primary {
@@ -21,15 +46,21 @@
   border-left: 1px solid #123;
   border-right: 1px solid #123;
 }
+
 .sidebar {
   width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 12px;
+  padding: 12px;
 
   nav {
     display: flex;
     flex-direction: column;
+  }
+
+  footer {
+    padding: 12px;
   }
 }
 </style>

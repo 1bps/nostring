@@ -15,21 +15,21 @@
             <Avatar :image-url="profile.avatar" />
           </div>
           <div class="actions">
-            <NostringButton round>
+            <NostringButton text round>
               <template #icon>
                 <NostringIcon>
                   <EllipsisHorizontalOutline />
                 </NostringIcon>
               </template>
             </NostringButton>
-            <NostringButton round>
+            <NostringButton text round>
               <template #icon>
                 <NostringIcon>
                   <FlashOutline />
                 </NostringIcon>
               </template>
             </NostringButton>
-            <NostringButton round>
+            <NostringButton text round>
               <template #icon>
                 <NostringIcon>
                   <MailOutline />
@@ -45,8 +45,8 @@
         <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
       </div>
     </header>
-    <div>{{ profile.bio }}</div>
-    <div>0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
+    <div class="bio">{{ profile.bio }}</div>
+    <div class="meta">0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
       </NostringText>
     </div>
   </div>
@@ -56,7 +56,7 @@
 import {
   FlashOutline,
   MailOutline,
-  EllipsisHorizontalOutline
+  EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
 
 interface Props {
@@ -78,6 +78,10 @@ const props = withDefaults(defineProps<Props>(), {
   header {
     padding-top: 78px;
     /* 128/2+10 */
+
+    &.with-banner {
+      padding: 0;
+    }
 
     .banner {
       height: 196px;
@@ -117,10 +121,15 @@ const props = withDefaults(defineProps<Props>(), {
         gap: 10px;
       }
     }
+  }
 
-    &.with-banner {
-      padding: 0;
-    }
+  .bio {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .meta {
+    padding: 5px 10px;
   }
 }
 </style>

@@ -1,8 +1,11 @@
 <template>
   <button class="ns-button" :class="[{
     'ns-button-round': round,
-    'ns-primary': primary,
-  }, `ns-button-${type}`]">
+    'ns-button-block': block,
+    'ns-button-text': text,
+  }, `ns-button-type-${type}`, `ns-button-size-${size}`]" :style="{
+  justifyContent: justify
+}">
     <slot name="icon"></slot>
     <span class="ns-button-content">
       <slot>{{ label }} </slot>
@@ -14,15 +17,21 @@
 interface Props {
   label?: string;
   round?: boolean;
-  primary?: boolean;
+  block?: boolean;
+  text?: boolean;
   type?: string;
+  size?: string;
+  justify?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: "",
   round: false,
   primary: false,
-  type: "default"
+  block: false,
+  text: false,
+  type: "default",
+  size: 'm'
 });
 </script>
 
@@ -30,9 +39,10 @@ const props = withDefaults(defineProps<Props>(), {
 .ns-button {
   --button-text-color: var(--text-color);
   --button-bg-color: transparent;
+  --button-height: 32px;
 
   margin: 0;
-  height: 32px;
+  height: var(--button-height);
   padding: 0 14px;
   border-radius: 3px;
   border: none;
@@ -47,34 +57,57 @@ const props = withDefaults(defineProps<Props>(), {
   cursor: pointer;
   text-decoration: none;
   user-select: none;
+  gap: calc(var(--button-height)/6);
 
   color: var(--button-text-color);
   background-color: var(--button-bg-color);
 
+  &.ns-button-size-xl {
+    --button-height: 48px;
+    font-size: 100%;
+  }
+
+  &.ns-button-size-l {
+    --button-height: 40px;
+    font-size: 100%;
+  }
+
   &.ns-button-round {
-    border-radius: 16px;
+    border-radius: calc(var(--button-height)/2);
     padding: 0 20px;
   }
 
-  &.ns-button-default {}
-
-  &.ns-button-tertiary {
-    --button-text-color: var(--text-color-tertiary);
+  &.ns-button-type-default {
+    border: 1px solid var(--text-color-tertiary);
   }
 
-  &.ns-button-primary {
+  &.ns-button-type-tertiary {
+    --button-text-color: var(--text-color-tertiary);
+    border: 1px solid var(--text-color-tertiary);
+  }
+
+  &.ns-button-type-primary {
     --button-text-color: var(--text-color-primary);
     --button-bg-color: #105795;
   }
 
-  &.ns-button-warning {}
+  &.ns-button-text {
+    --button-bg-color: tranparent;
+    border: none;
+  }
 
-  &.ns-button-error {}
+  &.ns-button-type-warning {}
+
+  &.ns-button-type-error {}
 
   .ns-button-content {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
   }
+}
+
+.ns-block {
+  display: block;
 }
 </style>
