@@ -94,6 +94,14 @@ const props = withDefaults(defineProps<Props>(), {
   &.ns-button-text {
     --button-bg-color: tranparent;
     border: none;
+    padding: 0 7px;
+    gap: 0;
+
+    .ns-button-content {
+      &:not(:empty) {
+        padding-left: 3px;
+      }
+    }
   }
 
   &.ns-button-type-warning {}

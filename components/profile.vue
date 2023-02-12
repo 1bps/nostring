@@ -73,7 +73,7 @@
     </header>
     <div class="bio">{{ profile.bio }}</div>
     <div class="meta">
-      <NostringSpace>
+      <NostringSpace gap="0">
         <NostringButton text v-if="profile.website">
           <template #icon>
             <NostringIcon>
@@ -142,12 +142,11 @@ const props = withDefaults(defineProps<Props>(), {
       flex-direction: column;
 
       .avatar-wrapper {
+        --width: calc(min(max(21.33%, 74px), 138px));
         position: relative;
-        width: 21.33%;
-        max-width: 138px;
-        /* 128+5x2 */
-        max-height: 138px;
-        padding-bottom: 21.33%;
+        width: var(--width);
+        padding-bottom: var(--width);
+        margin-top: calc(37px - var(--width));
         flex-shrink: 0;
 
         .avatar {
@@ -157,9 +156,6 @@ const props = withDefaults(defineProps<Props>(), {
           bottom: 0;
           left: 0;
         }
-
-        margin-top: -10.665%;
-        /* 21.33/2 */
       }
 
       .actions {
@@ -179,7 +175,8 @@ const props = withDefaults(defineProps<Props>(), {
   }
 
   .meta {
-    padding: 5px 10px;
+    padding-left: 3px;
+    padding-right: 3px;
   }
 
   .stat {

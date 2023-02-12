@@ -116,8 +116,7 @@ const props = withDefaults(defineProps<Props>(), {
         display: flex;
         gap: 3px;
         justify-content: space-between;
-        margin-left: -15px;
-        /* 15px of button padding - 3px of gap */
+        margin-left: -8px;
       }
     }
   }
