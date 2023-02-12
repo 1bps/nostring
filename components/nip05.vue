@@ -9,10 +9,10 @@
                 <Warning v-if="status === 'fail'" />
                 <CloseCircle v-if="status === 'fake'" />
             </NostringIcon>
-            <template v-if="verifiedWithUsername">
+            <template v-if="verifiedWithUsername && showDetail">
                 {{ profile?.nip05.replace(`${profile?.username}@`, '') }}
             </template>
-            <template v-if="!verifiedWithUsername">
+            <template v-if="!verifiedWithUsername && showDetail">
                 {{ profile?.nip05 }}
             </template>
 
@@ -26,10 +26,12 @@ import { Warning, ShieldCheckmark, CheckmarkCircle, CheckmarkDoneCircle, CloseCi
 interface Props {
     profile: any;
     status?: string;
+    showDetail: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    status: 'loading'
+    status: 'loading',
+    showDetail: false,
 });
 
 const verifiedWithUsername = computed(() =>

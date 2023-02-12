@@ -8,6 +8,7 @@
             note.profile.displayName || note.profile.username || note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
+          <Nip05 :profile="note.profile" :status="'verified'" />
         </div>
         <NostringText>
           <NostringTime :time="note.createdAt" relative />

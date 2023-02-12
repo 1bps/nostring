@@ -44,7 +44,7 @@
         }}</NameDisplay>
         <NostringSpace gap="0">
           <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
-          <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" />
+          <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" show-detail="true" />
         </NostringSpace>
         <NostringSpace gap="0" style="padding: 5px 10px; background: #222; border-radius: 5px;margin-top: 10px">
           <NostringText type="tertiary" style="margin-right: 3px">
