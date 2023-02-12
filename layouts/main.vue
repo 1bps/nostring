@@ -113,13 +113,16 @@ import {
   .app {
     >header {
       >nav {
-        position: absolute;
+        position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         flex-direction: row;
         background: var(--bg-color);
         border-top: 1px solid #123;
+        z-index: 1;
+        padding: 0 12px;
+        justify-content: space-between;
       }
     }
   }
