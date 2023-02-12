@@ -148,6 +148,7 @@ const props = withDefaults(defineProps<Props>(), {
         /* 128+5x2 */
         max-height: 138px;
         padding-bottom: 21.33%;
+        flex-shrink: 0;
 
         .avatar {
           position: absolute;
