@@ -46,10 +46,54 @@
           <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
           <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" />
         </NostringSpace>
+        {{ profile.nip19 }}
+        <NostringSpace gap="0" style="padding: 5px 10px; background: #222; border-radius: 5px;margin-top: 10px">
+          <NostringText type="tertiary" style="margin-right: 3px">
+            <NostringIcon>
+              <KeyOutline />
+            </NostringIcon>
+          </NostringText>
+          <NostringText type="tertiary">{{ profile.nip19.substr(0, 16) }}
+          </NostringText>
+          <NostringText type="tertiary" ellipsis style="flex-shrink: 1;">
+            {{
+              profile.nip19.substr(16,
+                profile.nip19.length - 32)
+            }}
+          </NostringText>
+          <NostringText type="tertiary">{{ profile.nip19.substring(profile.nip19.length - 16) }}
+          </NostringText>
+          <NostringText type="" style="margin-left: 3px">
+            <NostringIcon>
+              <CopyOutline />
+            </NostringIcon>
+          </NostringText>
+        </NostringSpace>
+
       </div>
     </header>
     <div class="bio">{{ profile.bio }}</div>
-    <div class="meta">0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
+    <div class="meta">
+      <NostringSpace>
+        <NostringButton text v-if="profile.website">
+          <template #icon>
+            <NostringIcon>
+              <LinkOutline />
+            </NostringIcon>
+          </template>
+          {{ profile.website }}
+        </NostringButton>
+        <NostringButton text v-if="profile.lud16">
+          <template #icon>
+            <NostringIcon>
+              <FlashOutline />
+            </NostringIcon>
+          </template>
+          {{ profile.lud16 }}
+        </NostringButton>
+      </NostringSpace>
+    </div>
+    <div class="stat">0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
       </NostringText>
     </div>
   </div>
@@ -61,6 +105,8 @@ import {
   MailOutline,
   EllipsisHorizontalOutline,
   LinkOutline,
+  KeyOutline,
+  CopyOutline
 } from "@vicons/ionicons5";
 
 interface Props {
@@ -133,6 +179,10 @@ const props = withDefaults(defineProps<Props>(), {
   }
 
   .meta {
+    padding: 5px 10px;
+  }
+
+  .stat {
     padding: 5px 10px;
   }
 }

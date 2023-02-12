@@ -1,5 +1,7 @@
 <template>
-    <span class="ns-text" :class="[`ns-text-${type}`, `ns-text-size-${size}`]">
+    <span class="ns-text" :class="[{
+        'ns-ellipsis': ellipsis,
+    }, `ns-text-${type}`, `ns-text-size-${size}`]">
         <slot>{{ content }} </slot>
     </span>
 </template>
@@ -9,6 +11,7 @@ interface Props {
     content?: string;
     type?: string;
     size?: string;
+    ellipsis?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,5 +48,10 @@ const props = withDefaults(defineProps<Props>(), {
     &.ns-text-tertiary {
         --text-color: var(--text-color-tertiary);
     }
+}
+
+.ns-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

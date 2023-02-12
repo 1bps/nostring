@@ -4,6 +4,7 @@ import {
     getPublicKey,
     getEventHash,
     signEvent,
+    nip19,
 } from "nostr-tools";
 
 const profileCache: any = {};
@@ -46,7 +47,10 @@ const profile = (pubkey: string): Object => {
                             nip05: content.nip05,
                             bio: content.about,
                             avatar: content.picture,
-                            banner: content.banner
+                            banner: content.banner,
+                            website: content.website,
+                            lud16: content.lud16,
+                            nip19: nip19.npubEncode(event.pubkey)
                         });
                     }
                 });
