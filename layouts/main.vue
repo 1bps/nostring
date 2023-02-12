@@ -8,7 +8,7 @@
               <HomeOutline />
             </NostringIcon>
           </template>
-          Home
+          <NostringText class="nav-item-label">Home</NostringText>
         </NostringButton>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
@@ -16,7 +16,7 @@
               <SearchOutline />
             </NostringIcon>
           </template>
-          Discovery
+          <NostringText class="nav-item-label">Discovery</NostringText>
         </NostringButton>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
@@ -24,7 +24,7 @@
               <MailOutline />
             </NostringIcon>
           </template>
-          Messages
+          <NostringText class="nav-item-label">Messages</NostringText>
         </NostringButton>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
@@ -32,7 +32,7 @@
               <NotificationsOutline />
             </NostringIcon>
           </template>
-          Notifications
+          <NostringText class="nav-item-label">Notifications</NostringText>
         </NostringButton>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
@@ -40,7 +40,7 @@
               <PeopleOutline />
             </NostringIcon>
           </template>
-          Channels
+          <NostringText class="nav-item-label">Channels</NostringText>
         </NostringButton>
       </nav>
     </header>
@@ -88,8 +88,34 @@ import {
     flex-basis: auto;
     flex-grow: 1;
     flex-shrink: 1;
+    max-width: 100%;
 
     display: flex;
+
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .app {
+    >header {
+      >nav {
+        width: auto;
+
+        .nav-item-label {
+          display: none
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .app {
+    >header {
+      >nav {
+        display: none;
+      }
+    }
   }
 }
 </style>

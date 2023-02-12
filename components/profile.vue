@@ -46,18 +46,17 @@
           <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
           <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" />
         </NostringSpace>
-        {{ profile.nip19 }}
         <NostringSpace gap="0" style="padding: 5px 10px; background: #222; border-radius: 5px;margin-top: 10px">
           <NostringText type="tertiary" style="margin-right: 3px">
             <NostringIcon>
               <KeyOutline />
             </NostringIcon>
           </NostringText>
-          <NostringText type="tertiary">{{ profile.nip19.substr(0, 16) }}
+          <NostringText type="tertiary">{{ profile.nip19.substr(0, 4) }}
           </NostringText>
           <NostringText type="tertiary" ellipsis style="flex-shrink: 1;">
             {{
-              profile.nip19.substr(16,
+              profile.nip19.substr(4,
                 profile.nip19.length - 32)
             }}
           </NostringText>

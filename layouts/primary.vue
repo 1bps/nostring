@@ -63,4 +63,10 @@ import {
     padding: 12px;
   }
 }
+
+@media screen and (max-width: 1004px) {
+  .sidebar {
+    display: none;
+  }
+}
 </style>
