@@ -7,7 +7,7 @@
       <aside class="sidebar">
         <nav>
           <NostringCard>
-            <NostringSpace vertical :gap="10">
+            <NostringSpace vertical gap="10">
               <NostringText type="primary">Start Nostring</NostringText>
               <NostringButton round size="l">Login with npub/nsec</NostringButton>
               <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
