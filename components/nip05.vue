@@ -10,7 +10,7 @@
                 <CloseCircle v-if="status === 'fake'" />
             </NostringIcon>
             <template v-if="verifiedWithName && showDetail">
-                {{ profile?.nip05.replace(`${profile?.name}@`, '') }}
+                {{ profile?.nip05.replace(`${profile?.name}@`, '').replace(`_@`, '') }}
             </template>
             <template v-if="!verifiedWithName && showDetail">
                 {{ profile?.nip05 }}
