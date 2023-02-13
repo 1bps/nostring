@@ -1,11 +1,9 @@
-import {
-    relayInit,
-    generatePrivateKey,
-    getPublicKey,
-    getEventHash,
-    signEvent,
-    nip19,
-} from "nostr-tools";
+import * as _relay from "nostr-tools/relay";
+import * as nip19 from "nostr-tools/nip19";
+
+const {
+    relayInit
+} = _relay;
 
 const profileCache: any = {};
 const noteCache: any = {};
@@ -17,8 +15,8 @@ const profile = (pubkey: string): Object => {
         cached = reactive({ pubkey: pubkey });
         profileCache[pubkey] = cached;
 
-        const relay = relayInit("wss://relay.damus.io");
         if (process.client) {
+            const relay = relayInit("wss://relay.damus.io");
             relay.connect().then(() => {
                 relay.on("connect", () => {
                     console.log(`connected to ${relay.url}`);

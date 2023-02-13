@@ -10,7 +10,11 @@
             note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
-          <Nip05 :profile="note.profile" :status="'verified'" />
+          <Nip05
+            v-if="note.profile?.nip05"
+            :profile="note.profile"
+            :status="'verified'"
+          />
         </div>
         <NostringText>
           <NostringTime :time="note.createdAt" relative />
@@ -26,7 +30,11 @@
               "
             >
               {{ void (tag = note.tags[+part.substring(2, part.length - 1)]) }}
-              <span v-if="tag[0] === 'p'">@{{ nip19.npubEncode(tag[1]).substr(4, 8) }}:{{nip19.npubEncode(tag[1]).substr(nip19.npubEncode(tag[1]).length-8)}}</span>
+              <span v-if="tag[0] === 'p'"
+                >@{{ nip19.npubEncode(tag[1]).substr(4, 8) }}:{{
+                  nip19.npubEncode(tag[1]).substr(nip19.npubEncode(tag[1]).length - 8)
+                }}</span
+              >
               <span v-if="tag[0] === 'e'">[note]{{ tag[1] }}</span>
             </template>
             <template v-else>{{ part }}</template>
@@ -86,7 +94,7 @@ import {
   FlashOutline,
   EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
-import {nip19} from "nostr-tools";
+import * as nip19 from "nostr-tools/nip19";
 
 interface Props {
   mini?: boolean;

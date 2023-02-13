@@ -16,8 +16,18 @@
 </template>
 
 <script setup lang="ts">
-import { relayInit, nip19, nip05 } from "nostr-tools";
 import note from "@/composables/model/note";
+import * as _nostrTools from "nostr-tools";
+import * as nip05 from "nostr-tools/nip05";
+import * as nip19 from "nostr-tools/nip19";
+
+const {
+  relayInit,
+  generatePrivateKey,
+  getPublicKey,
+  getEventHash,
+  signEvent,
+} = _nostrTools;
 
 const route = useRoute();
 
@@ -48,9 +58,8 @@ const hex = ref<string>("");
 const profile: any = datasource.profile(hex.value);
 const notes = ref<any[]>([]);
 
-const relay = relayInit("wss://relay.damus.io");
-
 if (process.client) {
+  const relay = relayInit("wss://relay.damus.io");
   await relay.connect();
 
   relay.on("connect", () => {

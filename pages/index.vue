@@ -11,19 +11,21 @@
 </template>
 
 <script setup lang="ts">
-import {
+import * as _nostrTools from "nostr-tools";
+import note from "@/composables/model/note";
+
+const {
   relayInit,
   generatePrivateKey,
   getPublicKey,
   getEventHash,
   signEvent,
-} from "nostr-tools";
-import note from "@/composables/model/note";
+} = _nostrTools;
 
 const notes = ref<any[]>([]);
 
-const relay = relayInit("wss://relay.damus.io");
 if (process.client) {
+  const relay = relayInit("wss://relay.damus.io");
   await relay.connect();
 
   relay.on("connect", () => {
