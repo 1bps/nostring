@@ -5,7 +5,9 @@
       <header>
         <div class="id">
           <NameDisplay>{{
-            note.profile.displayName || note.profile.username || note.profile.pubkey.substr(0, 12)
+            note.profile.displayName ||
+            note.profile.username ||
+            note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
           <Nip05 :profile="note.profile" :status="'verified'" />
@@ -15,7 +17,21 @@
         </NostringText>
       </header>
       <article>
-        <div class="text">{{ note.content }}</div>
+        <div class="text">
+          <template v-for="(part, partIndex) in contentParts" :key="partIndex">
+            <template
+              v-if="
+                /#\[\d+]/.test(part) &&
+                note.tags.length > +part.substring(2, part.length - 1)
+              "
+            >
+              {{ void (tag = note.tags[+part.substring(2, part.length - 1)]) }}
+              <span v-if="tag[0] === 'p'">@{{ nip19.npubEncode(tag[1]).substr(4, 8) }}:{{nip19.npubEncode(tag[1]).substr(nip19.npubEncode(tag[1]).length-8)}}</span>
+              <span v-if="tag[0] === 'e'">[note]{{ tag[1] }}</span>
+            </template>
+            <template v-else>{{ part }}</template>
+          </template>
+        </div>
         <div class="embeded"></div>
         <div class="meta"></div>
       </article>
@@ -49,7 +65,7 @@
               </NostringIcon>
             </template>
           </NostringButton>
-          <NostringButton text round type="tertiary">
+          <NostringButton text round type="tertiary" @click="handleClick">
             <template #icon>
               <NostringIcon>
                 <EllipsisHorizontalOutline />
@@ -68,8 +84,10 @@ import {
   RepeatOutline,
   ThumbsUpOutline,
   FlashOutline,
-  EllipsisHorizontalOutline
+  EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
+import {nip19} from "nostr-tools";
+
 interface Props {
   mini?: boolean;
   note: Object;
@@ -78,6 +96,14 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   mini: false,
 });
+
+const contentParts = computed(() => {
+  return props.note.content.split(/(?=#\[\d+\])|(?<=#\[\d+\])/);
+});
+
+const handleClick = () => {
+  console.info("note event", props.note.event);
+};
 </script>
 
 <style lang="scss">
@@ -109,7 +135,11 @@ const props = withDefaults(defineProps<Props>(), {
       }
     }
 
-    article {}
+    article {
+      .text {
+        word-break: break-word;
+      }
+    }
 
     aside {
       .action {
