@@ -26,7 +26,7 @@ import { Warning, ShieldCheckmark, CheckmarkCircle, CheckmarkDoneCircle, CloseCi
 interface Props {
     profile: any;
     status?: string;
-    showDetail: boolean
+    showDetail?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
