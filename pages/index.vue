@@ -11,46 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import * as _nostrTools from "nostr-tools";
-import note from "@/composables/model/note";
-
-const {
-  relayInit,
-  generatePrivateKey,
-  getPublicKey,
-  getEventHash,
-  signEvent,
-} = _nostrTools;
-
-const notes = ref<any[]>([]);
-
-if (process.client) {
-  const relay = relayInit("wss://relay.damus.io");
-  await relay.connect();
-
-  relay.on("connect", () => {
-    console.log(`connected to ${relay.url}`);
-  });
-  relay.on("error", () => {
-    console.log(`failed to connect to ${relay.url}`);
-  });
-
-  // let's query for an event that exists
-  let sub = relay.sub([
-    {
-      kinds: [1],
-    },
-  ]);
-  sub.on("event", (event: any) => {
-    console.log("we got the event we wanted:", event);
-    if (event.kind == 1) {
-      notes.value.push(note.fromEvent(event));
-    }
-  });
-  sub.on("eose", () => {
-    sub.unsub();
-  });
-}
+const { data: notes } = datasource.getNotes();
 </script>
 
 <style lang="scss">
@@ -66,8 +27,7 @@ if (process.client) {
       border-bottom: 1px solid #123;
     }
 
-    .note {
-    }
+    .note {}
   }
 }
 </style>

@@ -1,20 +1,18 @@
 <template>
   <div class="note">
-    <Avatar :image-url="note.profile.avatar" />
+    <NuxtLink :to="`/p/${note.profile.nip19}`">
+      <Avatar :image-url="note.profile.avatar" />
+    </NuxtLink>
     <div class="content">
       <header>
         <div class="id">
           <NameDisplay>{{
             note.profile.displayName ||
-            note.profile.name ||
-            note.profile.pubkey.substr(0, 12)
+              note.profile.name ||
+              note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{ note.profile.name || note.profile.pubkey.substr(0, 12) }}</Name>
-          <Nip05
-            v-if="note.profile?.nip05"
-            :profile="note.profile"
-            :status="'verified'"
-          />
+          <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'verified'" />
         </div>
         <NostringText>
           <NostringTime :time="note.createdAt" relative />
@@ -23,18 +21,14 @@
       <article>
         <div class="text">
           <template v-for="(part, partIndex) in contentParts" :key="partIndex">
-            <template
-              v-if="
-                /#\[\d+]/.test(part) &&
-                note.tags.length > +part.substring(2, part.length - 1)
-              "
-            >
-              {{ void (tag = note.tags[+part.substring(2, part.length - 1)]) }}
-              <span v-if="tag[0] === 'p'"
-                >@{{ nip19.npubEncode(tag[1]).substr(4, 8) }}:{{
-                  nip19.npubEncode(tag[1]).substr(nip19.npubEncode(tag[1]).length - 8)
-                }}</span
-              >
+            <template v-if="
+              /#\[\d+]/.test(part) &&
+              note.tags.length > +part.substring(2, part.length - 1)
+            ">
+              {{ void(tag = note.tags[+part.substring(2, part.length - 1)]) }}
+              <span v-if="tag[0] === 'p'">@{{ nip19.npubEncode(tag[1]).substr(4, 8) }}:{{
+                nip19.npubEncode(tag[1]).substr(nip19.npubEncode(tag[1]).length - 8)
+              }}</span>
               <span v-if="tag[0] === 'e'">[note]{{ tag[1] }}</span>
             </template>
             <template v-else>{{ part }}</template>
