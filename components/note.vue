@@ -6,10 +6,10 @@
         <div class="id">
           <NameDisplay>{{
             note.profile.displayName ||
-            note.profile.username ||
+            note.profile.name ||
             note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
-          <Name>{{ note.profile.username || note.profile.pubkey.substr(0, 12) }}</Name>
+          <Name>{{ note.profile.name || note.profile.pubkey.substr(0, 12) }}</Name>
           <Nip05
             v-if="note.profile?.nip05"
             :profile="note.profile"

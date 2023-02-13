@@ -1,6 +1,6 @@
 <template>
     <NostringText type="tertiary" :class="[`nip05-${status}`, {
-        'username-verified': verifiedWithUsername
+        'name-verified': verifiedWithName
     }]">
         <NostringSpace gap="0">
             <NostringIcon>
@@ -9,10 +9,10 @@
                 <Warning v-if="status === 'fail'" />
                 <CloseCircle v-if="status === 'fake'" />
             </NostringIcon>
-            <template v-if="verifiedWithUsername && showDetail">
-                {{ profile?.nip05.replace(`${profile?.username}@`, '') }}
+            <template v-if="verifiedWithName && showDetail">
+                {{ profile?.nip05.replace(`${profile?.name}@`, '') }}
             </template>
-            <template v-if="!verifiedWithUsername && showDetail">
+            <template v-if="!verifiedWithName && showDetail">
                 {{ profile?.nip05 }}
             </template>
 
@@ -34,8 +34,8 @@ const props = withDefaults(defineProps<Props>(), {
     showDetail: false,
 });
 
-const verifiedWithUsername = computed(() =>
-    props.profile?.nip05.startsWith(props.profile?.username) || props.profile?.nip05.startsWith('_@')
+const verifiedWithName = computed(() =>
+    props.profile?.nip05.startsWith(props.profile?.name) || props.profile?.nip05.startsWith('_@')
 );
 </script>
 
@@ -43,7 +43,7 @@ const verifiedWithUsername = computed(() =>
 .nip05-verified {
     --text-color: #105795 !important;
 
-    &.username-verified {
+    &.name-verified {
         color: var(--bg-color);
         background-color: transparent;
         background-image: repeating-linear-gradient(15deg, #179510, #107993 5px, #93108c 25px, #937410 40px, #179510 55px);

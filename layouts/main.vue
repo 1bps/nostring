@@ -2,14 +2,16 @@
   <div class="app">
     <header role="banner">
       <nav>
-        <NostringButton size="xl" justify="flex-start" text>
-          <template #icon>
-            <NostringIcon>
-              <HomeOutline />
-            </NostringIcon>
-          </template>
-          <NostringText class="nav-item-label">Home</NostringText>
-        </NostringButton>
+        <NuxtLink to="/">
+          <NostringButton size="xl" justify="flex-start" text>
+            <template #icon>
+              <NostringIcon>
+                <HomeOutline />
+              </NostringIcon>
+            </template>
+            <NostringText class="nav-item-label">Home</NostringText>
+          </NostringButton>
+        </NuxtLink>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>

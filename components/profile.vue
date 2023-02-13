@@ -40,11 +40,11 @@
           </div>
         </NostringSpace>
         <NameDisplay header>{{
-          profile.displayName || profile.username || profile.pubkey.substr(0, 12)
+          profile.displayName || profile.name || profile.pubkey.substr(0, 12)
         }}</NameDisplay>
         <NostringSpace gap="0">
-          <Name :value="profile.username || profile.pubkey.substr(0, 12)" />
-          <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" show-detail="true" />
+          <Name :value="profile.name || profile.pubkey.substr(0, 12)" />
+          <Nip05 v-if="profile.nip05" :profile="profile" :status="'verified'" :show-detail="true" />
         </NostringSpace>
         <NostringSpace gap="0" style="padding: 5px 10px; background: #222; border-radius: 5px;margin-top: 10px">
           <NostringText type="tertiary" style="margin-right: 3px">
@@ -52,15 +52,15 @@
               <KeyOutline />
             </NostringIcon>
           </NostringText>
-          <NostringText type="tertiary">{{ profile.nip19.substr(0, 4) }}
+          <NostringText type="tertiary">{{ profile.nip19?.substr(0, 4) }}
           </NostringText>
           <NostringText type="tertiary" ellipsis style="flex-shrink: 1;">
             {{
-              profile.nip19.substr(4,
-                profile.nip19.length - 32)
+              profile.nip19?.substr(4,
+                profile.nip19?.length - 32)
             }}
           </NostringText>
-          <NostringText type="tertiary">{{ profile.nip19.substring(profile.nip19.length - 16) }}
+          <NostringText type="tertiary">{{ profile.nip19?.substring(profile.nip19?.length - 16) }}
           </NostringText>
           <NostringText type="" style="margin-left: 3px">
             <NostringIcon>
