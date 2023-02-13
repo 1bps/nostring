@@ -1,7 +1,7 @@
 <template>
   <div class="avatar">
     <img v-if="imageUrl" :src="imageUrl" />
-    <img v-if="!imageUrl" src="@/assets/images/undraw_cat_px71.svg" />
+    <img v-if="!imageUrl" src="/assets/images/undraw_cat_px71.svg" />
   </div>
 </template>
 
