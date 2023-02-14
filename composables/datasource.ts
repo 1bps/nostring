@@ -20,6 +20,7 @@ const noteOfProfileCache: any = {};
 const noteCache: any = {};
 const eventCache: any = {};
 const nip05Cache: any = {};
+const floodContentMap: any = {};
 
 let getCacheArray = (cache: any, key: string, update = () => { }) => {
     return getCacheData(cache, key, () => [], update);
@@ -133,8 +134,22 @@ const getNotesOfPubkey = (pubkey: string): Object => {
     return cached;
 }
 
+const isFlood = (note: any): boolean => {
+    let cached = getCacheData(floodContentMap, note.event.pubkey, () => ({ latest: [] }));
+    if (cached.data.latest.some(n => n.content == note.content && n.id != note.id) || (cached.data.latest.length > 0 && Date.now() - cached.data.latest[cached.data.latest.length - 1].createdAt < 60 * 1000)) {
+        // TODO fix check prev note
+        return true;
+    } else {
+        if (cached.data.latest.length > 10) {
+            cached.data.latest.shift();
+        }
+        cached.data.latest.push(note);
+        return false;
+    }
+}
+
 const datasource = {
-    checkNip05, getProfile, getNotes, getNotesOfPubkey
+    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood
 }
 
 export default datasource;

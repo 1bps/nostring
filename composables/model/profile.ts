@@ -2,6 +2,7 @@ import * as nip19 from "nostr-tools/nip19";
 
 const fromEvent = (e: any): Object => {
     let content = JSON.parse(e.content);
+    let cachedNip05Check = datasource.checkNip05(content.nip05);
     return reactive({
         id: e.id,
         event: e,
@@ -9,6 +10,7 @@ const fromEvent = (e: any): Object => {
         name: content.name,
         displayName: content.display_name,
         nip05: content.nip05,
+        nip05Check: cachedNip05Check.data,
         bio: content.about,
         avatar: content.picture,
         banner: content.banner,
