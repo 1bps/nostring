@@ -27,6 +27,7 @@ body {
 }
 a{
   text-decoration: none;
+  color: #2a99ee;
 }
 div#__nuxt {
   height: 100%;
