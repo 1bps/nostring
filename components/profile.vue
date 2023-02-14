@@ -125,8 +125,7 @@ const props = withDefaults(defineProps<Props>(), {
   gap: 5px;
 
   header {
-    padding-top: 78px;
-    /* 128/2+10 */
+    padding-top: 88px;
 
     &.with-banner {
       padding: 0;
