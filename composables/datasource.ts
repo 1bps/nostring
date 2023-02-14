@@ -21,39 +21,59 @@ const noteCache: any = {};
 const eventCache: any = {};
 const nip05Cache: any = {};
 
+let getCacheArray = (cache: any, key: string, update = () => { }) => {
+    return getCacheData(cache, key, () => [], update);
+}
+
+let getCacheData = (cache: any, key: string, create: Function, update = () => { }) => {
+    let cached = cache[key];
+    if (!cached) {
+        cached = reactive({ data: create() });
+        cache[key] = cached;
+        if (process.client) {
+            update && update(key, cached);
+        }
+    }
+    return cached;
+}
+
+let getProfileCached = (pubkey: string, update = () => { }) => {
+    return getCacheData(profileCache, pubkey, () => (
+        {
+            pubkey: pubkey, nip19: nip19.npubEncode(pubkey)
+        }), update);
+}
+
 let subEventHandler = (event: any) => {
-    if (event.kind === Kind.Metadata) {
-        let cached = profileCache[event.pubkey];
-        Object.assign(cached.data, profile.fromEvent(event));
-    } else if (event.kind === Kind.Text) {
-        let cachedGlobal = noteOfProfileCache[''];
-        let cached = noteOfProfileCache[event.pubkey];
-        let data = note.fromEvent(event);
-        cachedGlobal.data.push(data);
-        cached.data.push(data);
+    try {
+        if (event.kind === Kind.Metadata) {
+            let cached = profileCache[event.pubkey];
+            Object.assign(cached.data, profile.fromEvent(event));
+        } else if (event.kind === Kind.Text) {
+            let cachedGlobal = getCacheArray(noteCache, '');
+            let cached = getCacheArray(noteOfProfileCache, event.pubkey);
+            let data = note.fromEvent(event);
+            cachedGlobal.data.push(data);
+            cached.data.push(data);
+        }
+    } catch (e) {
+        console.log('error when handle event', e);
     }
 }
 
 const checkNip05 = (pubkey: string, identity: string): Object => {
-    let cached = nip05Cache[identity];
-    if (!cached) {
-        cached = reactive({ data: { identity: identity, status: 'loading' } });
-        nip05Cache[nip05] = cached;
-
-        if (process.client) {
-            cached.data.status = 'loading';
-            nip05.queryProfile(identity).then((nip05Result: any) => {
-                if (pubkey === nip05Result.pubkey) {
-                    cached.data.status = 'verified';
-                } else {
-                    cached.data.status = 'fake';
-                }
-            }).catch(() => {
-                cached.data.status = 'fail';
-            });
-        }
-    }
-    return cached;
+    return getCacheData(nip05Cache, identity, () => ({ identity: identity, status: 'loading' }), (key, cached) => {
+        cached.data.status = 'loading';
+        nip05.queryProfile(identity).then((nip05Result: any) => {
+            if (pubkey === nip05Result.pubkey) {
+                cached.data.status = 'verified';
+            } else {
+                cached.data.status = 'fake';
+            }
+        }).catch(() => {
+            cached.data.status = 'fail';
+        });
+    });
 }
 
 const getProfile = (pubkey: string): Object => {
@@ -78,29 +98,22 @@ const getProfile = (pubkey: string): Object => {
 }
 
 const getNotes = (): Object => {
-    let cached = noteOfProfileCache[''];
-    if (!cached) {
-        cached = reactive({ data: [] });
-        noteOfProfileCache[''] = cached;
-
-        if (process.client) {
-            let relays = [...DEFAULT_RELAYS];
-            let sub = pool.sub(relays, [{
-                kinds: [Kind.Text],
-            }]);
-            sub.on("event", subEventHandler);
-            sub.on("eose", () => {
-                // sub.unsub();
-            });
-        }
-    }
-    return cached;
+    return getCacheArray(noteCache, '', (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Text],
+        }]);
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            // sub.unsub();
+        });
+    });
 }
 
 const getNotesOfPubkey = (pubkey: string): Object => {
     let cached = noteOfProfileCache[pubkey];
     if (!cached) {
-        cached = reactive({ data: [] });
+        cached = reactive({ data: ref([]) });
         noteOfProfileCache[pubkey] = cached;
 
         if (process.client) {
