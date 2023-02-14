@@ -8,7 +8,7 @@
       },
     ]"
   >
-    <NostringSpace gap="0">
+    <NostringSpace gap="0" inline>
       <NostringIcon>
         <CheckmarkCircle v-if="status === 'verified'" />
         <HelpCircle v-if="status === 'loading'" />

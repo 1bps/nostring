@@ -1,10 +1,15 @@
 <template>
-  <div class="ns-space" :class="{
-    'ns-vertical': vertical
-  }" :style="{
-  gap: gap? `${gap}px` : undefined,
-  justifyContent: justify
-}">
+  <div
+    class="ns-space"
+    :class="{
+      'ns-vertical': vertical,
+      'ns-inline': inline,
+    }"
+    :style="{
+      gap: gap ? `${gap}px` : undefined,
+      justifyContent: justify,
+    }"
+  >
     <slot>{{ content }} </slot>
   </div>
 </template>
@@ -14,12 +19,14 @@ interface Props {
   content?: string;
   vertical?: boolean;
   gap?: string;
-  justify?: string
+  justify?: string;
+  inline?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  vertial: false,
+  vertical: false,
   content: "",
+  inline: false,
 });
 </script>
 
@@ -31,5 +38,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 .ns-vertical {
   flex-direction: column;
+}
+
+.ns-inline {
+  display: inline-flex;
 }
 </style>
