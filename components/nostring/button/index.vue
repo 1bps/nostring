@@ -1,5 +1,5 @@
 <template>
-  <button class="ns-button" :class="[{
+  <component :is="tag" class="ns-button" :class="[{
     'ns-button-round': round,
     'ns-button-block': block,
     'ns-button-text': text,
@@ -10,7 +10,7 @@
     <span class="ns-button-content">
       <slot>{{ label }} </slot>
     </span>
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +22,7 @@ interface Props {
   type?: string;
   size?: string;
   justify?: string;
+  tag?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +32,8 @@ const props = withDefaults(defineProps<Props>(), {
   block: false,
   text: false,
   type: "default",
-  size: 'm'
+  size: 'm',
+  tag: 'button',
 });
 </script>
 

@@ -74,13 +74,13 @@
     <div class="bio">{{ profile.bio }}</div>
     <div class="meta">
       <NostringSpace gap="0">
-        <NostringButton text v-if="profile.website">
+        <NostringButton tag="a" text v-if="profile.website" :href="profile.website" nofollow>
           <template #icon>
             <NostringIcon>
               <LinkOutline />
             </NostringIcon>
           </template>
-          {{ profile.website }}
+          {{ profile.website.replace(/https?:\/\//, '') }}
         </NostringButton>
         <NostringButton text v-if="profile.lud16">
           <template #icon>
