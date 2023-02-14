@@ -25,7 +25,9 @@ body {
   scrollbar-color: #666 #333;
   color: var(--text-color);
 }
-
+a{
+  text-decoration: none;
+}
 div#__nuxt {
   height: 100%;
 }
