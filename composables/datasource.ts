@@ -2,11 +2,13 @@ import * as _nostrTools from "nostr-tools";
 
 import profile from "@/composables/model/profile";
 import note from "@/composables/model/note";
+import { processExpression } from "@vue/compiler-core";
 
 const {
     SimplePool,
     Kind,
-    nip19
+    nip05,
+    nip19,
 } = _nostrTools;
 
 const pool = new SimplePool();
@@ -17,6 +19,7 @@ const profileCache: any = {};
 const noteOfProfileCache: any = {};
 const noteCache: any = {};
 const eventCache: any = {};
+const nip05Cache: any = {};
 
 let subEventHandler = (event: any) => {
     if (event.kind === Kind.Metadata) {
@@ -31,8 +34,29 @@ let subEventHandler = (event: any) => {
     }
 }
 
-const getProfile = (pubkey: string): Object => {
+const checkNip05 = (pubkey: string, identity: string): Object => {
+    let cached = nip05Cache[identity];
+    if (!cached) {
+        cached = reactive({ data: { identity: identity, status: 'loading' } });
+        nip05Cache[nip05] = cached;
 
+        if (process.client) {
+            cached.data.status = 'loading';
+            nip05.queryProfile(identity).then((nip05Result: any) => {
+                if (pubkey === nip05Result.pubkey) {
+                    cached.data.status = 'verified';
+                } else {
+                    cached.data.status = 'fake';
+                }
+            }).catch(() => {
+                cached.data.status = 'fail';
+            });
+        }
+    }
+    return cached;
+}
+
+const getProfile = (pubkey: string): Object => {
     let cached = profileCache[pubkey];
     if (!cached) {
         cached = reactive({ data: { pubkey: pubkey, nip19: nip19.npubEncode(pubkey) } });
@@ -97,7 +121,7 @@ const getNotesOfPubkey = (pubkey: string): Object => {
 }
 
 const datasource = {
-    getProfile, getNotes, getNotesOfPubkey
+    checkNip05, getProfile, getNotes, getNotesOfPubkey
 }
 
 export default datasource;
