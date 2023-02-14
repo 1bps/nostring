@@ -11,7 +11,12 @@
             note.profile.name ||
             note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
-          <Name>{{ note.profile.name || note.profile.pubkey.substr(0, 12) }}</Name>
+          <Name>{{
+            note.profile.name ||
+            `${note.profile.nip19.substr(4, 8)}:${note.profile.nip19.substr(
+              note.profile.nip19.length - 8
+            )}`
+          }}</Name>
           <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'loading'" />
         </NostringSpace>
         <NostringText>
