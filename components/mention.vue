@@ -16,8 +16,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {});
-
-console.log("mention", props.profile);
 </script>
 
 <script lang="ts">
