@@ -3,7 +3,11 @@
     <ClientOnly>
       <Profile :profile="profile" />
       <div class="timeline">
-        <div v-for="(note, noteIndex) in notes.sort((a, b) => b.createdAt - a.createdAt)" :key="noteIndex" class="item">
+        <div
+          v-for="(note, noteIndex) in notes.sort((a, b) => b.createdAt - a.createdAt)"
+          :key="noteIndex"
+          class="item"
+        >
           <Note :note="note" />
         </div>
       </div>
@@ -28,8 +32,8 @@ let hex = "";
       hex = result.data as string;
     }
   } else if (/^([A-Za-z0-9-_]+@)?\w+(\.\w+)+$/.test(id)) {
-    let profile = await nip05.queryProfile(id);
-    hex = profile?.pubkey || "";
+    let nip05Profile = await nip05.queryProfile(id);
+    hex = nip05Profile?.pubkey || "";
   } else if (/^[A-Fa-f0-9]{64}/.test(id)) {
     hex = id;
   } else {
@@ -60,7 +64,8 @@ const { data: notes } = datasource.getNotesOfPubkey(hex);
       border-bottom: 1px solid #123;
     }
 
-    .note {}
+    .note {
+    }
   }
 }
 </style>

@@ -8,14 +8,14 @@
         <NostringSpace class="id" gap="1" style="align-items: center">
           <NameDisplay>{{
             note.profile.displayName ||
-              note.profile.name ||
-              note.profile.pubkey.substr(0, 12)
+            note.profile.name ||
+            note.profile.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{
             note.profile.name ||
-              `${note.profile.nip19.substr(4, 8)}:${note.profile.nip19.substr(
-                note.profile.nip19.length - 8
-              )}`
+            `${note.profile.nip19.substr(4, 8)}:${note.profile.nip19.substr(
+              note.profile.nip19.length - 8
+            )}`
           }}</Name>
           <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'loading'" />
         </NostringSpace>
@@ -26,21 +26,33 @@
       <article>
         <div class="text">
           <template v-for="(part, partIndex) in contentParts" :key="partIndex">
-            <template v-if="
-              /#\[\d+]/.test(part) &&
-              note.tags.length > +part.substring(2, part.length - 1)
-            ">
-              {{ void(tag = note.tags[+part.substring(2, part.length - 1)]) }}
+            <template
+              v-if="
+                /#\[\d+]/.test(part) &&
+                note.event.tags.length > +part.substring(2, part.length - 1)
+              "
+            >
+              {{ void (tag = note.event.tags[+part.substring(2, part.length - 1)]) }}
               <template v-if="tag[0] === 'p'">
-                {{ void(tagProfile = datasource.getProfile(tag[1]).data) }}
-                <NuxtLink :to="`/p/${tagProfile.nip19}`" style="display: inline-flex; align-items: center;">
+                {{ void (tagProfile = datasource.getProfile(tag[1]).data) }}
+                <NuxtLink
+                  :to="`/p/${tagProfile.value.nip19}`"
+                  style="display: inline-flex; align-items: center"
+                >
                   @{{
-                    tagProfile.name ||
-                      `${tagProfile.nip19.substr(4, 8)}:${tagProfile.nip19.substr(
-                        tagProfile.nip19.length - 8
-                      )}`
+                    tagProfile.value.name ||
+                    `${tagProfile.value.nip19.substr(
+                      4,
+                      8
+                    )}:${tagProfile.value.nip19.substr(
+                      tagProfile.value.nip19.length - 8
+                    )}`
                   }}
-                  <Nip05 v-if="tagProfile?.nip05" :profile="tagProfile" :status="'loading'" />
+                  <Nip05
+                    v-if="tagProfile?.value.nip05"
+                    :profile="tagProfile.value"
+                    :status="'loading'"
+                  />
                 </NuxtLink>
               </template>
               <span v-if="tag[0] === 'e'">[note]{{ tag[1] }}</span>
@@ -103,10 +115,11 @@ import {
   EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
 import * as nip19 from "nostr-tools/nip19";
+import { NoteModel } from "~~/composables/model/note";
 
 interface Props {
   mini?: boolean;
-  note: Object;
+  note: NoteModel;
 }
 
 const props = withDefaults(defineProps<Props>(), {

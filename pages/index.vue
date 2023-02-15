@@ -11,12 +11,14 @@
 </template>
 
 <script setup lang="ts">
+import { NoteModel } from "~~/composables/model/note";
+
 const { data: notesData } = datasource.getNotes();
 const notes = computed(() =>
-  notesData
-    .sort((a: any, b: any) => b.createdAt - a.createdAt)
+  notesData.value
+    .sort((a, b) => (b.event?.created_at || 0) - (a.event?.created_at || 0))
     .filter((n: any) => n.profile?.nip05)
-    .filter((n: any) => n.profile?.nip05Check?.status == "verified")
+    .filter((n: any) => n.profile?.nip05Status == "verified")
 );
 </script>
 

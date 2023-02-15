@@ -1,8 +1,10 @@
 import * as _nostrTools from "nostr-tools";
 
-import profile from "@/composables/model/profile";
-import note from "@/composables/model/note";
-import { processExpression } from "@vue/compiler-core";
+import profile, { ProfileModel } from "@/composables/model/profile";
+import note, { NoteModel } from "@/composables/model/note";
+import { Event } from 'nostr-tools';
+import { EventModel } from "./model/event";
+import { Ref } from "nuxt/dist/app/compat/capi";
 
 const {
     SimplePool,
@@ -13,7 +15,7 @@ const {
 
 const pool = new SimplePool();
 
-const DEFAULT_RELAYS = ["wss://relay.damus.io"];
+const DEFAULT_RELAYS = ["wss://relay.damus.io", "wss://relay.1bps.io"];
 
 const profileCache: any = {};
 const noteOfProfileCache: any = {};
@@ -22,73 +24,91 @@ const eventCache: any = {};
 const nip05Cache: any = {};
 const floodContentMap: any = {};
 
-interface Cached {
-    data: any,
+interface Cached<T> {
+    data: Ref<T>;
+    lastUpdate?: Date;
+}
+type CacheUpdate<T> = {
+    (key: string,
+        cached: Cached<T>): void;
+}
+interface CacheHandler<T> {
+    create: () => T;
+    update?: CacheUpdate<T>;
 }
 
-let getCacheArray = (cache: any, key: string, update = (key: string, cached: Cached) => { }): Cached => {
-    return getCacheData(cache, key, () => [], update);
+let getCacheArray = <T>(cache: any, key: string,
+    update?: CacheUpdate<T[]>): Cached<T[]> => {
+    return getCacheData(cache, key, {
+        create: () => ([]),
+        update
+    });
 }
 
-let getCacheData = (cache: any, key: string, create: Function, update = (key: string, cached: Cached) => { }): Cached => {
+let getCacheData = <T>(cache: any, key: string,
+    handler: CacheHandler<T>): Cached<T> => {
     let cached = cache[key];
     if (!cached) {
-        cached = reactive({ data: create() });
+        cached = { data: ref<T>(handler.create()) };
         cache[key] = cached;
         if (process.client) {
-            update && update(key, cached);
+            handler.update && handler.update(key, cached);
         }
     }
     return cached;
 }
 
-let getProfileCached = (pubkey: string, update = () => { }): Cached => {
-    return getCacheData(profileCache, pubkey, () => (
-        {
-            pubkey: pubkey, nip19: nip19.npubEncode(pubkey)
-        }), update);
+let getProfileCached = (pubkey: string,
+    update?: CacheUpdate<ProfileModel>): Cached<ProfileModel> => {
+    return getCacheData(profileCache, pubkey, {
+        create: () => ({
+            pubkey: pubkey,
+            nip19: nip19.npubEncode(pubkey)
+        }),
+        update
+    });
 }
 
-let subEventHandler = (event: any) => {
+let subEventHandler = (event: Event) => {
     try {
         if (event.kind === Kind.Metadata) {
-            let cached = profileCache[event.pubkey];
-            Object.assign(cached.data, profile.fromEvent(event));
+            let cached = getProfileCached(event.pubkey);
+            let profileModel = profile.fromEvent(event);
+            cached.data.value = profileModel;
         } else if (event.kind === Kind.Text) {
             let cachedGlobal = getCacheArray(noteCache, '');
             let cached = getCacheArray(noteOfProfileCache, event.pubkey);
             let data = note.fromEvent(event);
             if (!isFlood(data)) {
-                cachedGlobal.data.push(data);
+                cachedGlobal.data.value.push(data);
             }
-            cached.data.push(data);
+            cached.data.value.push(data);
         }
     } catch (e) {
         console.log('error when handle event', e);
     }
 }
 
-const checkNip05 = (pubkey: string, identity: string): Cached => {
-    return getCacheData(nip05Cache, identity, () => ({ identity: identity, status: 'loading' }), (key, cached) => {
-        cached.data.status = 'loading';
-        nip05.queryProfile(identity).then((nip05Result: any) => {
-            if (pubkey === nip05Result.pubkey) {
-                cached.data.status = 'verified';
-            } else {
-                cached.data.status = 'fake';
-            }
-        }).catch(() => {
-            cached.data.status = 'fail';
-        });
+const checkNip05 = (pubkey: string, identity: string): Cached<string> => {
+    return getCacheData(nip05Cache, identity, {
+        create: () => 'loading',
+        update: (key, cached) => {
+            cached.data.value = 'loading';
+            nip05.queryProfile(identity).then((nip05Result: any) => {
+                if (pubkey === nip05Result.pubkey) {
+                    cached.data.value = 'verified';
+                } else {
+                    cached.data.value = 'fake';
+                }
+            }).catch(() => {
+                cached.data.value = 'fail';
+            });
+        }
     });
 }
 
-const getProfile = (pubkey: string): Cached => {
-    let cached = profileCache[pubkey];
-    if (!cached) {
-        cached = reactive({ data: { pubkey: pubkey, nip19: nip19.npubEncode(pubkey) } });
-        profileCache[pubkey] = cached;
-
+const getProfile = (pubkey: string): Cached<ProfileModel> => {
+    return getProfileCached(pubkey, (key, cached) => {
         if (process.client) {
             let relays = [...DEFAULT_RELAYS];
             let sub = pool.sub(relays, [{
@@ -100,11 +120,10 @@ const getProfile = (pubkey: string): Cached => {
                 // sub.unsub(); 
             });
         }
-    }
-    return cached;
+    });
 }
 
-const getNotes = (): Cached => {
+const getNotes = (): Cached<NoteModel[]> => {
     return getCacheArray(noteCache, '', (key, cached) => {
         let relays = [...DEFAULT_RELAYS];
         let sub = pool.sub(relays, [{
@@ -117,45 +136,45 @@ const getNotes = (): Cached => {
     });
 }
 
-const getNotesOfPubkey = (pubkey: string): Cached => {
-    let cached = noteOfProfileCache[pubkey];
-    if (!cached) {
-        cached = reactive({ data: ref([]) });
-        noteOfProfileCache[pubkey] = cached;
+const getNotesOfPubkey = (pubkey: string): Cached<NoteModel[]> => {
+    return getCacheArray(noteOfProfileCache, pubkey, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Text],
+            authors: [pubkey],
+        }]);
 
-        if (process.client) {
-            let relays = [...DEFAULT_RELAYS];
-            let sub = pool.sub(relays, [{
-                kinds: [Kind.Text],
-                authors: [pubkey],
-            }]);
-
-            sub.on("event", subEventHandler);
-            sub.on("eose", () => {
-                // sub.unsub();
-            });
-
-        }
-    }
-    return cached;
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            // sub.unsub();
+        });
+    })
 }
 
 const isEventFlood = (event: any): boolean => {
-    let cached = getCacheData(floodContentMap, event.pubkey, () => ({ latest: [] }));
-    if (cached.data.latest.some((e: any) => e.content == event.content && event.id != e.id) || (cached.data.latest.length > 0 && Date.now() - cached.data.latest[cached.data.latest.length - 1].createdAt < 60 * 1000)) {
+    let cached = getCacheData(floodContentMap, event.pubkey, {
+        create: (): {
+            latest: any[]
+        } => ({ latest: [] })
+    });
+    let lastest = cached.data.value.latest;
+    if (lastest.some((e: any) =>
+        e.content == event.content && event.id != e.id)
+        || (lastest.length > 0
+            && Date.now() - lastest[lastest.length - 1].create_at < 60 * 1000)) {
         // TODO fix check prev
         return true;
     } else {
-        if (cached.data.latest.length > 10) {
-            cached.data.latest.shift();
+        if (lastest.length > 10) {
+            lastest.shift();
         }
-        cached.data.latest.push(event);
+        lastest.push(event);
         return false;
     }
 }
 
-const isFlood = (note: any): boolean => {
-    return isEventFlood(note.event);
+const isFlood = (em: EventModel): boolean => {
+    return isEventFlood(em.event);
 }
 
 const datasource = {

@@ -34,9 +34,10 @@ import {
   CloseCircle,
   HelpCircle,
 } from "@vicons/ionicons5";
+import { ProfileModel } from "~~/composables/model/profile";
 
 interface Props {
-  profile: any;
+  profile: ProfileModel;
   showDetail?: boolean;
   defaultStatus?: string;
 }
@@ -45,14 +46,14 @@ const props = withDefaults(defineProps<Props>(), {
   showDetail: false,
 });
 
-const result = datasource.checkNip05(props.profile.pubkey, props.profile.nip05);
-
-const status = computed(() => result.data?.status || props.defaultStatus);
+const status = computed(() => props.profile.nip05Status || props.defaultStatus);
 
 const verifiedWithName = computed(
   () =>
-    props.profile?.nip05.startsWith(props.profile?.name) ||
-    props.profile?.nip05.startsWith("_@")
+    status.value == "verified" &&
+    (props.profile?.name
+      ? props.profile?.nip05?.startsWith(props.profile?.name)
+      : true || props.profile?.nip05?.startsWith("_@"))
 );
 </script>
 
