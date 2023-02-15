@@ -14,11 +14,10 @@
 const { data: notesData } = datasource.getNotes();
 const notes = computed(() =>
   notesData
-    .sort((a, b) => b.createdAt - a.createdAt)
-    .filter(n => n.profile?.nip05)
-  // .filter(n => n.profile?.nip05Check?.status == 'verified')
-
-)
+    .sort((a: any, b: any) => b.createdAt - a.createdAt)
+    .filter((n: any) => n.profile?.nip05)
+    .filter((n: any) => n.profile?.nip05Check?.status == "verified")
+);
 </script>
 
 <style lang="scss">
@@ -34,7 +33,8 @@ const notes = computed(() =>
       border-bottom: 1px solid #123;
     }
 
-    .note {}
+    .note {
+    }
   }
 }
 </style>

@@ -22,11 +22,15 @@ const eventCache: any = {};
 const nip05Cache: any = {};
 const floodContentMap: any = {};
 
-let getCacheArray = (cache: any, key: string, update = () => { }) => {
+interface Cached {
+    data: any,
+}
+
+let getCacheArray = (cache: any, key: string, update = (key: string, cached: Cached) => { }): Cached => {
     return getCacheData(cache, key, () => [], update);
 }
 
-let getCacheData = (cache: any, key: string, create: Function, update = () => { }) => {
+let getCacheData = (cache: any, key: string, create: Function, update = (key: string, cached: Cached) => { }): Cached => {
     let cached = cache[key];
     if (!cached) {
         cached = reactive({ data: create() });
@@ -38,7 +42,7 @@ let getCacheData = (cache: any, key: string, create: Function, update = () => { 
     return cached;
 }
 
-let getProfileCached = (pubkey: string, update = () => { }) => {
+let getProfileCached = (pubkey: string, update = () => { }): Cached => {
     return getCacheData(profileCache, pubkey, () => (
         {
             pubkey: pubkey, nip19: nip19.npubEncode(pubkey)
@@ -54,7 +58,7 @@ let subEventHandler = (event: any) => {
             let cachedGlobal = getCacheArray(noteCache, '');
             let cached = getCacheArray(noteOfProfileCache, event.pubkey);
             let data = note.fromEvent(event);
-            if(!isFlood(data)){
+            if (!isFlood(data)) {
                 cachedGlobal.data.push(data);
             }
             cached.data.push(data);
@@ -64,7 +68,7 @@ let subEventHandler = (event: any) => {
     }
 }
 
-const checkNip05 = (pubkey: string, identity: string): Object => {
+const checkNip05 = (pubkey: string, identity: string): Cached => {
     return getCacheData(nip05Cache, identity, () => ({ identity: identity, status: 'loading' }), (key, cached) => {
         cached.data.status = 'loading';
         nip05.queryProfile(identity).then((nip05Result: any) => {
@@ -79,7 +83,7 @@ const checkNip05 = (pubkey: string, identity: string): Object => {
     });
 }
 
-const getProfile = (pubkey: string): Object => {
+const getProfile = (pubkey: string): Cached => {
     let cached = profileCache[pubkey];
     if (!cached) {
         cached = reactive({ data: { pubkey: pubkey, nip19: nip19.npubEncode(pubkey) } });
@@ -100,7 +104,7 @@ const getProfile = (pubkey: string): Object => {
     return cached;
 }
 
-const getNotes = (): Object => {
+const getNotes = (): Cached => {
     return getCacheArray(noteCache, '', (key, cached) => {
         let relays = [...DEFAULT_RELAYS];
         let sub = pool.sub(relays, [{
@@ -113,7 +117,7 @@ const getNotes = (): Object => {
     });
 }
 
-const getNotesOfPubkey = (pubkey: string): Object => {
+const getNotesOfPubkey = (pubkey: string): Cached => {
     let cached = noteOfProfileCache[pubkey];
     if (!cached) {
         cached = reactive({ data: ref([]) });
@@ -136,18 +140,22 @@ const getNotesOfPubkey = (pubkey: string): Object => {
     return cached;
 }
 
-const isFlood = (note: any): boolean => {
-    let cached = getCacheData(floodContentMap, note.event.pubkey, () => ({ latest: [] }));
-    if (cached.data.latest.some(n => n.content == note.content && n.id != note.id) || (cached.data.latest.length > 0 && Date.now() - cached.data.latest[cached.data.latest.length - 1].createdAt < 60 * 1000)) {
-        // TODO fix check prev note
+const isEventFlood = (event: any): boolean => {
+    let cached = getCacheData(floodContentMap, event.pubkey, () => ({ latest: [] }));
+    if (cached.data.latest.some((e: any) => e.content == event.content && event.id != e.id) || (cached.data.latest.length > 0 && Date.now() - cached.data.latest[cached.data.latest.length - 1].createdAt < 60 * 1000)) {
+        // TODO fix check prev
         return true;
     } else {
         if (cached.data.latest.length > 10) {
             cached.data.latest.shift();
         }
-        cached.data.latest.push(note);
+        cached.data.latest.push(event);
         return false;
     }
+}
+
+const isFlood = (note: any): boolean => {
+    return isEventFlood(note.event);
 }
 
 const datasource = {
