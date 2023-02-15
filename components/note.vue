@@ -84,6 +84,7 @@ import * as nip19 from "nostr-tools/nip19";
 import Mention from "@/components/mention.vue";
 import NostringText from "@/components/nostring/text.vue";
 import { NoteModel } from "~~/composables/model/note";
+import LightningInvoice from "@/components/lightning/invoice.vue";
 
 interface Props {
   mini?: boolean;
@@ -126,6 +127,19 @@ const Text = {
                   }
                 }
                 return h(NostringText, { type: "error" }, { default: () => e });
+              }
+              return e;
+            });
+          }
+          return p;
+        })
+        .flat()
+        .map((p) => {
+          if (typeof p === "string") {
+            return p.split(/(lnbc[a-z0-9]+)/i).map((e)=>{
+              let match = e.match(/lnbc[a-z0-9]+/i);
+              if(match){
+                return h(LightningInvoice, {invoice: e}, {});
               }
               return e;
             });
