@@ -54,7 +54,9 @@ let subEventHandler = (event: any) => {
             let cachedGlobal = getCacheArray(noteCache, '');
             let cached = getCacheArray(noteOfProfileCache, event.pubkey);
             let data = note.fromEvent(event);
-            cachedGlobal.data.push(data);
+            if(!isFlood(data)){
+                cachedGlobal.data.push(data);
+            }
             cached.data.push(data);
         }
     } catch (e) {

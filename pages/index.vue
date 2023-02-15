@@ -14,7 +14,6 @@
 const { data: notesData } = datasource.getNotes();
 const notes = computed(() =>
   notesData
-    .filter(n => !datasource.isFlood(n))
     .sort((a, b) => b.createdAt - a.createdAt)
     .filter(n => n.profile?.nip05)
   // .filter(n => n.profile?.nip05Check?.status == 'verified')
