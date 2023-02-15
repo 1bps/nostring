@@ -19,7 +19,7 @@
         {{ profile?.nip05.replace(`${profile?.name}@`, "").replace(`_@`, "") }}
       </template>
       <template v-if="!verifiedWithName && showDetail">
-        {{ profile?.nip05 }}
+        {{ profile?.nip05?.replace('_@', "") }}
       </template>
     </NostringSpace>
   </NostringText>
@@ -51,9 +51,9 @@ const status = computed(() => props.profile.nip05Status || props.defaultStatus);
 const verifiedWithName = computed(
   () =>
     status.value == "verified" &&
-    (props.profile?.name
+    ((props.profile?.name
       ? props.profile?.nip05?.startsWith(props.profile?.name)
-      : true || props.profile?.nip05?.startsWith("_@"))
+      : true) || props.profile?.nip05?.startsWith("_@"))
 );
 </script>
 
