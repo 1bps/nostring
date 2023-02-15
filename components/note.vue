@@ -24,42 +24,7 @@
         </NostringText>
       </header>
       <article>
-        <div class="text">
-          <template v-for="(part, partIndex) in contentParts" :key="partIndex">
-            <template
-              v-if="
-                /#\[\d+]/.test(part) &&
-                note.event.tags.length > +part.substring(2, part.length - 1)
-              "
-            >
-              {{ void (tag = note.event.tags[+part.substring(2, part.length - 1)]) }}
-              <template v-if="tag[0] === 'p'">
-                {{ void (tagProfile = datasource.getProfile(tag[1]).data) }}
-                <NuxtLink
-                  :to="`/p/${tagProfile.value.nip19}`"
-                  style="display: inline-flex; align-items: center"
-                >
-                  @{{
-                    tagProfile.value.name ||
-                    `${tagProfile.value.nip19.substr(
-                      4,
-                      8
-                    )}:${tagProfile.value.nip19.substr(
-                      tagProfile.value.nip19.length - 8
-                    )}`
-                  }}
-                  <Nip05
-                    v-if="tagProfile?.value.nip05"
-                    :profile="tagProfile.value"
-                    :status="'loading'"
-                  />
-                </NuxtLink>
-              </template>
-              <span v-if="tag[0] === 'e'">[note]{{ tag[1] }}</span>
-            </template>
-            <template v-else>{{ part }}</template>
-          </template>
-        </div>
+        <Text />
         <div class="embeded"></div>
         <div class="meta"></div>
       </article>
@@ -115,6 +80,9 @@ import {
   EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
 import * as nip19 from "nostr-tools/nip19";
+
+import Mention from "@/components/mention.vue";
+import NostringText from "@/components/nostring/text.vue";
 import { NoteModel } from "~~/composables/model/note";
 
 interface Props {
@@ -126,9 +94,57 @@ const props = withDefaults(defineProps<Props>(), {
   mini: false,
 });
 
-const contentParts = computed(() => {
-  return props.note.content.split(/(?=#\[\d+\])|(?<=#\[\d+\])/);
-});
+const Text = {
+  render: () => {
+    let parts: any[] = [props.note.content];
+
+    try {
+      parts = parts
+        .map((p) => {
+          if (typeof p === "string") {
+            return p.split(/(#\[\d+\])/).map((e) => {
+              let match = e.match(/#\[(\d+)\]/);
+              if (match) {
+                let tagIndex = parseInt(match[1]);
+                let tag = props.note.event?.tags[tagIndex];
+                if (tag) {
+                  switch (tag[0]) {
+                    case "p": {
+                      return h(
+                        Mention,
+                        { profile: datasource.getProfile(tag[1]).data.value },
+                        { defaul: () => "" }
+                      );
+                    }
+                    case "e": {
+                      return nip19.noteEncode(tag[1]);
+                    }
+
+                    case "t": {
+                      return e;
+                    }
+                  }
+                }
+                return h(NostringText, { type: "error" }, { default: () => e });
+              }
+              return e;
+            });
+          }
+          return p;
+        })
+        .flat()
+        .map((p) => {
+          if (typeof p === "string") {
+            return h(NostringText, {}, { default: () => p });
+          }
+          return p;
+        });
+    } catch (e) {
+      console.error(e);
+    }
+    return h("div", { class: "text" }, { default: () => parts });
+  },
+};
 
 const handleClick = () => {
   console.info("note event", props.note.event);
