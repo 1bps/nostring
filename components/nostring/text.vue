@@ -59,6 +59,9 @@ export default class NostringText {}
   &.ns-text-tertiary {
     --text-color: var(--text-color-tertiary);
   }
+  &.ns-text-success {
+    --text-color: var(--text-color-success);
+  }
 }
 
 .ns-ellipsis {

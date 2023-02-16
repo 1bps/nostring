@@ -1,6 +1,4 @@
-<template>
-  <NuxtPage />
-</template>
+<template><NuxtPage /></template>
 
 <style lang="scss">
 :root {
@@ -8,6 +6,7 @@
   --text-color: rgba(255, 255, 255, .667);
   --text-color-primary: rgba(255, 255, 255, .833);
   --text-color-tertiary: rgba(255, 255, 255, .333);
+  --text-color-success: #109510;
 }
 
 * {
@@ -25,10 +24,12 @@ body {
   scrollbar-color: #666 #333;
   color: var(--text-color);
 }
-a{
+
+a {
   text-decoration: none;
   color: #2a99ee;
 }
+
 div#__nuxt {
   height: 100%;
 }
