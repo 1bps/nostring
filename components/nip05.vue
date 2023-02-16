@@ -10,7 +10,8 @@
   >
     <NostringSpace gap="0" style="align-items: center">
       <NostringIcon>
-        <CheckmarkCircle v-if="status === 'verified'" />
+        <CheckmarkCircle v-if="status === 'verified' && !verifiedWithName" />
+        <CheckmarkDoneCircle v-if="status === 'verified' && verifiedWithName" />
         <HelpCircle v-if="status === 'loading'" />
         <Warning v-if="status === 'fail'" />
         <CloseCircle v-if="status === 'fake'" />
