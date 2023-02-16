@@ -12,8 +12,8 @@
               <NostringButton round size="l">Login with npub/nsec</NostringButton>
               <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
               <NostringButton type="primary" round size="l"
-              @click="showGenModal = true"
-              >Generate new nsec</NostringButton>
+              @click="handleGenerate"
+              >Generate new Identity</NostringButton>
             </NostringSpace>
           </NostringCard>
         </nav>
@@ -33,7 +33,7 @@
       </aside>
       <NostringModal v-model:show="showGenModal">
         <NostringCard>
-          New key blabla
+          <Generate />
         </NostringCard>
       </NostringModal>
     </ClientOnly>
@@ -46,6 +46,11 @@ import {
 } from "@vicons/ionicons5";
 
 const showGenModal = ref(false);
+
+const handleGenerate = ()=>{
+  showGenModal.value = true;
+
+}
 </script>
 
 <style lang="scss">
