@@ -1,7 +1,6 @@
 <template>
   <NostringText type="tertiary">
-    <slot name="mention">@</slot>
-    <slot>{{ value }}</slot>
+    <span class="profile-name"><slot>{{ value }}</slot></span>
   </NostringText>
 </template>
 
@@ -14,3 +13,11 @@ const props = withDefaults(defineProps<Props>(), {
   value: "",
 });
 </script>
+
+<style lang="scss">
+.profile-name{
+  &::before{
+    content: '@'
+  }
+}
+</style>
