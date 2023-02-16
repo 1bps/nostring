@@ -46,29 +46,9 @@
           <Name :value="profile.name || profile.pubkey.substr(0, 12)" />
           <Nip05 v-if="profile.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
         </NostringSpace>
-        <NostringSpace gap="0" style="padding: 5px 10px; background: #222; border-radius: 5px;margin-top: 10px">
-          <NostringText type="tertiary" style="margin-right: 3px">
-            <NostringIcon>
-              <KeyOutline />
-            </NostringIcon>
-          </NostringText>
-          <NostringText type="tertiary">{{ profile.nip19?.substr(0, 4) }}
-          </NostringText>
-          <NostringText type="tertiary" ellipsis style="flex-shrink: 1;">
-            {{
-              profile.nip19?.substr(4,
-                profile.nip19?.length - 32)
-            }}
-          </NostringText>
-          <NostringText type="tertiary">{{ profile.nip19?.substring(profile.nip19?.length - 16) }}
-          </NostringText>
-          <NostringText type="" style="margin-left: 3px">
-            <NostringIcon>
-              <CopyOutline />
-            </NostringIcon>
-          </NostringText>
-        </NostringSpace>
-
+        <div>
+          <Key :nip19="profile.nip19" />
+        </div>
       </div>
     </header>
     <div class="bio">{{ profile.bio }}</div>
@@ -80,7 +60,7 @@
               <LinkOutline />
             </NostringIcon>
           </template>
-          {{ profile.website.replace(/https?:\/\//, '') }}
+          {{ profile.website.replace(/https?:\/\//, "") }}
         </NostringButton>
         <NostringButton text v-if="profile.lud16">
           <template #icon>
@@ -92,25 +72,27 @@
         </NostringButton>
       </NostringSpace>
     </div>
-    <div class="stat">0 <NostringText type="tertiary">Following</NostringText> 0 <NostringText type="tertiary">Follower
-      </NostringText>
+    <div class="stat">
+      0 <NostringText type="tertiary">Following</NostringText> 0
+      <NostringText type="tertiary">Follower </NostringText>
     </div>
-  </div>
+</div>
 </template>
 
 <script setup lang="ts">
+
+
 import {
   FlashOutline,
   MailOutline,
   EllipsisHorizontalOutline,
   LinkOutline,
-  KeyOutline,
-  CopyOutline
 } from "@vicons/ionicons5";
+import { ProfileModel } from "~~/composables/model/profile";
 
 interface Props {
   mini?: boolean;
-  profile: Object;
+  profile: ProfileModel;
 }
 
 const props = withDefaults(defineProps<Props>(), {
