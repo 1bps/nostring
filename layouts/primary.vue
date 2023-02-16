@@ -11,9 +11,7 @@
               <NostringText type="primary">Start Nostring</NostringText>
               <NostringButton round size="l">Login with npub/nsec</NostringButton>
               <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
-              <NostringButton type="primary" round size="l"
-              @click="handleGenerate"
-              >Generate new Identity</NostringButton>
+              <NostringButton type="primary" round size="l" @click="handleGenerate">Generate Identity</NostringButton>
             </NostringSpace>
           </NostringCard>
         </nav>
@@ -21,23 +19,25 @@
         <footer>
           <NostringSpace justify="center">
             <NostringText type="tertiary" size="s">
-              Powered by Nostring
+              Nostring
             </NostringText>
-            <NostringText type="tertiary" size="s">
-              <NostringIcon>
-                <LogoGithub />
-              </NostringIcon>
-            </NostringText>
+            <NuxtLink href="https://github.com/1bps/nostring">
+              <NostringText type="tertiary" size="s">
+                <NostringIcon>
+                  <LogoGithub />
+                </NostringIcon>
+              </NostringText>
+            </NuxtLink>
           </NostringSpace>
         </footer>
       </aside>
       <NostringModal v-model:show="showGenModal">
-        <NostringCard>
+        <NostringCard size="l">
           <Generate />
         </NostringCard>
       </NostringModal>
     </ClientOnly>
-  </NuxtLayout>
+</NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -47,7 +47,7 @@ import {
 
 const showGenModal = ref(false);
 
-const handleGenerate = ()=>{
+const handleGenerate = () => {
   showGenModal.value = true;
 
 }
