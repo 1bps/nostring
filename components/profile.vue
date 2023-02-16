@@ -39,9 +39,7 @@
             <NostringButton round primary type="primary">Follow</NostringButton>
           </div>
         </NostringSpace>
-        <NameDisplay header>{{
-          profile.displayName || profile.name || profile.pubkey.substr(0, 12)
-        }}</NameDisplay>
+        <NameDisplay header :profile="profile"/>
         <NostringSpace gap="0" style="align-items: center">
           <Name :value="profile.name || profile.pubkey.substr(0, 12)" />
           <Nip05 v-if="profile.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
