@@ -11,7 +11,9 @@
               <NostringText type="primary">Start Nostring</NostringText>
               <NostringButton round size="l">Login with npub/nsec</NostringButton>
               <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
-              <NostringButton type="primary" round size="l">Generate new nsec</NostringButton>
+              <NostringButton type="primary" round size="l"
+              @click="showGenModal = true"
+              >Generate new nsec</NostringButton>
             </NostringSpace>
           </NostringCard>
         </nav>
@@ -29,6 +31,11 @@
           </NostringSpace>
         </footer>
       </aside>
+      <NostringModal v-model:show="showGenModal">
+        <NostringCard>
+          New key blabla
+        </NostringCard>
+      </NostringModal>
     </ClientOnly>
   </NuxtLayout>
 </template>
@@ -37,6 +44,8 @@
 import {
   LogoGithub
 } from "@vicons/ionicons5";
+
+const showGenModal = ref(false);
 </script>
 
 <style lang="scss">
