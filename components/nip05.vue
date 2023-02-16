@@ -1,29 +1,26 @@
 <template>
-  <NostringText
-    type="tertiary"
-    :class="[
-      `nip05-${status}`,
-      {
-        'name-verified': verifiedWithName,
-      },
-    ]"
-  >
-    <NostringSpace gap="0" style="align-items: center">
-      <NostringIcon>
-        <CheckmarkCircle v-if="status === 'verified' && !verifiedWithName" />
-        <CheckmarkDoneCircle v-if="status === 'verified' && verifiedWithName" />
-        <HelpCircle v-if="status === 'loading'" />
-        <Warning v-if="status === 'fail'" />
-        <CloseCircle v-if="status === 'fake'" />
-      </NostringIcon>
-      <template v-if="verifiedWithName && showDetail">
-        {{ profile?.nip05.replace(`${profile?.name}@`, "").replace(`_@`, "") }}
-      </template>
-      <template v-if="!verifiedWithName && showDetail">
-        {{ profile?.nip05?.replace('_@', "") }}
-      </template>
-    </NostringSpace>
-  </NostringText>
+  <NostringText type="tertiary" :class="[
+    `nip05-${status}`,
+    {
+      'name-verified': verifiedWithName,
+    },
+  ]" style="display: inline-flex">
+    <NostringIcon style="overflow:hidden">
+      <CheckmarkCircle v-if="status === 'verified' && !verifiedWithName" />
+      <CheckmarkDoneCircle v-if="status === 'verified' && verifiedWithName" />
+      <HelpCircle v-if="status === 'loading'" />
+      <Warning v-if="status === 'fail'" />
+      <CloseCircle v-if="status === 'fake'" />
+      <span v-if="verifiedWithName && showDetail">@</span>
+    </NostringIcon>
+    <template v-if="verifiedWithName && showDetail">
+      {{ profile?.nip05.replace(`${profile?.name}@`, "").replace(`_@`, "") }}
+    </template>
+    <template v-if="!verifiedWithName && showDetail">
+      {{ profile?.nip05?.replace('_@', "") }}
+    </template>
+
+</NostringText>
 </template>
 
 <script setup lang="ts">
@@ -53,8 +50,7 @@ const verifiedWithName = computed(
   () =>
     status.value == "verified" &&
     ((props.profile?.name
-      ? props.profile?.nip05?.startsWith(props.profile?.name)
-      : true) || props.profile?.nip05?.startsWith("_@"))
+      && props.profile?.nip05?.startsWith(props.profile?.name)) || props.profile?.nip05?.startsWith("_@"))
 );
 </script>
 
@@ -65,19 +61,17 @@ const verifiedWithName = computed(
   &.name-verified {
     color: var(--bg-color);
     background-color: transparent;
-    background-image: repeating-linear-gradient(
-      15deg,
-      #179510,
-      #107993 5px,
-      #93108c 25px,
-      #937410 40px,
-      #179510 55px
-    );
+    background-image: repeating-linear-gradient(15deg,
+        #179510,
+        #107993 5px,
+        #93108c 25px,
+        #937410 40px,
+        #179510 55px);
     mix-blend-mode: difference;
     position: relative;
 
     &::before {
-      content: " ";
+      content: ' ';
       display: block;
       position: absolute;
       top: 0;

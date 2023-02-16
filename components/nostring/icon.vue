@@ -1,7 +1,7 @@
 <template>
-    <div class="ns-icon">
+    <span class="ns-icon">
         <slot/>
-    </div>
+    </span>
 </template>
 
 <style lang="scss">
