@@ -19,6 +19,7 @@ const DEFAULT_RELAYS = ["wss://relay.damus.io", "wss://relay.1bps.io"];
 
 const profileCache: any = {};
 const noteOfProfileCache: any = {};
+const notesCache: any = {};
 const noteCache: any = {};
 const eventCache: any = {};
 const nip05Cache: any = {};
@@ -69,6 +70,17 @@ let getProfileCached = (pubkey: string,
     });
 }
 
+let getNoteCached = (id: string,
+    update?: CacheUpdate<NoteModel>): Cached<NoteModel> => {
+    return getCacheData(noteCache, id, {
+        create: () => ({
+            id: id,
+            nip19: nip19.npubEncode(id)
+        }),
+        update
+    });
+}
+
 let subEventHandler = (event: Event) => {
     try {
         if (event.kind === Kind.Metadata) {
@@ -76,13 +88,18 @@ let subEventHandler = (event: Event) => {
             let profileModel = profile.fromEvent(event);
             cached.data.value = profileModel;
         } else if (event.kind === Kind.Text) {
-            let cachedGlobal = getCacheArray(noteCache, '');
-            let cached = getCacheArray(noteOfProfileCache, event.pubkey);
-            let data = note.fromEvent(event);
-            if (!isFlood(data)) {
-                cachedGlobal.data.value.push(data);
+            let cachedGlobal = getCacheArray(notesCache, '');
+            let cachedOfPubkey = getCacheArray(noteOfProfileCache, event.pubkey);
+            let noteModel = note.fromEvent(event);
+            if(event.id){
+                let cached = getNoteCached(event.id);
+                cached.data.value = noteModel;
             }
-            cached.data.value.push(data);
+            
+            if (!isFlood(noteModel)) {
+                cachedGlobal.data.value.push(noteModel);
+            }
+            cachedOfPubkey.data.value.push(noteModel);
         }
     } catch (e) {
         console.log('error when handle event', e);
@@ -124,7 +141,7 @@ const getProfile = (pubkey: string): Cached<ProfileModel> => {
 }
 
 const getNotes = (): Cached<NoteModel[]> => {
-    return getCacheArray(noteCache, '', (key, cached) => {
+    return getCacheArray(notesCache, '', (key, cached) => {
         let relays = [...DEFAULT_RELAYS];
         let sub = pool.sub(relays, [{
             kinds: [Kind.Text],
@@ -149,6 +166,21 @@ const getNotesOfPubkey = (pubkey: string): Cached<NoteModel[]> => {
             // sub.unsub();
         });
     })
+}
+
+const getNote = (id: string): Cached<NoteModel> => {
+    return getNoteCached(id, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Text],
+            ids: [id]
+        }]);
+
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            sub.unsub();
+        });
+    });
 }
 
 const isEventFlood = (event: any): boolean => {
@@ -178,7 +210,7 @@ const isFlood = (em: EventModel): boolean => {
 }
 
 const datasource = {
-    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood
+    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood, getNote
 }
 
 export default datasource;

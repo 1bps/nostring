@@ -1,27 +1,27 @@
 <template>
   <div class="note">
-    <NuxtLink :to="`/p/${note.profile.nip19}`">
-      <Avatar :image-url="note.profile.avatar" />
+    <NuxtLink :to="`/p/${note.profile?.nip19}`">
+      <Avatar :image-url="note.profile?.avatar" />
     </NuxtLink>
     <div class="content">
       <header>
         <NostringSpace class="id" gap="1" style="align-items: center">
           <NameDisplay>{{
-            note.profile.displayName ||
-              note.profile.name ||
-              note.profile.pubkey.substr(0, 12)
+            note.profile?.displayName ||
+              note.profile?.name ||
+              note.profile?.pubkey.substr(0, 12)
           }}</NameDisplay>
           <Name>{{
-            note.profile.name ||
-              `${note.profile.nip19.substr(4, 8)}:${note.profile.nip19.substr(
-                note.profile.nip19.length - 8
+            note.profile?.name ||
+              `${note.profile?.nip19.substr(4, 8)}:${note.profile?.nip19.substr(
+                note.profile?.nip19.length - 8
               )}`
           }}</Name>
           <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'loading'" />
         </NostringSpace>
-        <NostringText>
+        <NuxtLink :to="`/e/${note.nip19}`">
           <NostringTime :time="note.createdAt" relative />
-        </NostringText>
+        </NuxtLink>
       </header>
       <article>
         <Replying style="margin-bottom: 5px" />
