@@ -6,7 +6,7 @@ import { Ref } from "nuxt/dist/app/compat/capi";
 
 export interface NoteModel extends EventModel {
     id?: string;
-    nip19?:string;
+    nip19?: string;
     content?: string;
     profile?: Ref<ProfileModel>;
 }
@@ -18,7 +18,7 @@ const fromEvent = (e: Event): NoteModel => {
         event: e,
         createdAt: new Date(e.created_at * 1000),
         content: e.content,
-        profile: datasource.getProfile(e.pubkey).data,
+        profile: computed(() => datasource.getProfile(e.pubkey).data.value),
     };
 }
 

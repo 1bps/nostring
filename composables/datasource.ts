@@ -5,6 +5,7 @@ import note, { NoteModel } from "@/composables/model/note";
 import { Event } from 'nostr-tools';
 import { EventModel } from "./model/event";
 import { Ref } from "nuxt/dist/app/compat/capi";
+import contacts, { ContactsModel } from "./model/contacts";
 
 const {
     SimplePool,
@@ -18,6 +19,7 @@ const pool = new SimplePool();
 const DEFAULT_RELAYS = ["wss://relay.damus.io", "wss://relay.1bps.io"];
 
 const profileCache: any = {};
+const contactsCache: any = {};
 const noteOfProfileCache: any = {};
 const notesCache: any = {};
 const noteCache: any = {};
@@ -70,6 +72,14 @@ let getProfileCached = (pubkey: string,
     });
 }
 
+let getContactsCached = (pubkey: string,
+    update?: CacheUpdate<ContactsModel>): Cached<ContactsModel> => {
+    return getCacheData(contactsCache, pubkey, {
+        create: () => ({}),
+        update
+    });
+}
+
 let getNoteCached = (id: string,
     update?: CacheUpdate<NoteModel>): Cached<NoteModel> => {
     return getCacheData(noteCache, id, {
@@ -91,15 +101,19 @@ let subEventHandler = (event: Event) => {
             let cachedGlobal = getCacheArray(notesCache, '');
             let cachedOfPubkey = getCacheArray(noteOfProfileCache, event.pubkey);
             let noteModel = note.fromEvent(event);
-            if(event.id){
+            if (event.id) {
                 let cached = getNoteCached(event.id);
                 cached.data.value = noteModel;
             }
-            
+
             if (!isFlood(noteModel)) {
                 cachedGlobal.data.value.push(noteModel);
             }
             cachedOfPubkey.data.value.push(noteModel);
+        }else if(event.kind === Kind.Contacts){
+            let cached = getContactsCached(event.pubkey);
+            let contactsModel = contacts.fromEvent(event);
+            cached.data.value = contactsModel;
         }
     } catch (e) {
         console.log('error when handle event', e);
@@ -134,7 +148,7 @@ const getProfile = (pubkey: string): Cached<ProfileModel> => {
             }]);
             sub.on("event", subEventHandler);
             sub.on("eose", () => {
-                // sub.unsub(); 
+                sub.unsub();
             });
         }
     });
@@ -183,6 +197,21 @@ const getNote = (id: string): Cached<NoteModel> => {
     });
 }
 
+const getContacts = (pubkey: string): Cached<ContactsModel> => {
+    return getContactsCached(pubkey, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Contacts],
+            authors: [pubkey]
+        }]);
+
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            sub.unsub();
+        });
+    });
+}
+
 const isEventFlood = (event: any): boolean => {
     let cached = getCacheData(floodContentMap, event.pubkey, {
         create: (): {
@@ -210,7 +239,7 @@ const isFlood = (em: EventModel): boolean => {
 }
 
 const datasource = {
-    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood, getNote
+    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood, getNote, getContacts
 }
 
 export default datasource;
