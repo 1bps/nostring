@@ -52,14 +52,13 @@
     <div class="bio">{{ profile.bio }}</div>
     <div class="meta">
       <NostringSpace gap="0">
-
-        <NostringButton tag="span" text>
+        <NostringButton v-if="profile.website" tag="span" text>
           <template #icon>
             <NostringIcon>
               <LinkOutline />
             </NostringIcon>
           </template>
-          <NuxtLink v-if="profile.website" :to="profile.website">
+          <NuxtLink :to="profile.website">
             {{ profile.website.replace(/https?:\/\//, "") }}
           </NuxtLink>
         </NostringButton>
@@ -99,7 +98,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const followingNumber = computed(() =>
-  props.profile.contacts?.list?.length
+  props.profile.contacts?.value?.list?.length
 );
 </script>
 

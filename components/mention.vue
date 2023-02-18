@@ -17,7 +17,3 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {});
 </script>
-
-<script lang="ts">
-export default class Mention {}
-</script>

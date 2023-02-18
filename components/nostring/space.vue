@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 </script>
 
-<style lang="scss" scope>
+<style lang="scss">
 .ns-space {
   display: flex;
   gap: 5px;

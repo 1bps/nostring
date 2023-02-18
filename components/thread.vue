@@ -3,13 +3,12 @@
         <div class="thread-current">
             <Note :note="note" :show-replyings="false" :detail-mode="true" />
         </div>
-        <Timeline :notes="note.replies" :show-replyings="false" />
+        <Timeline v-if="note.replies.value?.length" :notes="note.replies.value" :show-replyings="false" />
 </div>
 </template>
   
 <script setup lang="ts">
-
-
+import { NoteModel } from '~~/composables/model/note';
 
 interface Props {
     note: NoteModel;

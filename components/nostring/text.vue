@@ -28,11 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 </script>
 
-<script lang="ts">
-export default class NostringText {}
-</script>
-
-<style lang="scss" scope>
+<style lang="scss">
 .ns-text {
   color: var(--text-color);
 

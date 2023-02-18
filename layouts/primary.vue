@@ -59,6 +59,8 @@ const handleGenerate = () => {
   width: 100%;
   border-left: 1px solid #123;
   border-right: 1px solid #123;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .sidebar {

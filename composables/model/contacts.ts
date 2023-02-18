@@ -1,27 +1,19 @@
-import datasource from "../datasource";
-import { ProfileModel } from "./profile";
 import { EventModel } from "./event";
 import { Event } from 'nostr-tools';
-import { Ref } from "nuxt/dist/app/compat/capi";
+import { EventTagProfile } from "./event/tag";
 
-export interface ContactsModel extends EventModel {
-    id?: string;
-    list?: any[];
-}
+export class ContactsModel extends EventModel {
 
-const fromEvent = (e: Event): ContactsModel => {
-    return {
-        id: e.id,
-        event: e,
-        createdAt: new Date(e.created_at * 1000),
-        list: e.tags
+    private _list: EventTagProfile[];
+
+    constructor(e: Event) {
+        super(e);
+        this._list = e.tags
             .filter(tag => tag && tag.length >= 2 && tag[0] === 'p')
-            // .map(tag => computed(() => datasource.getProfile(tag[1]).data.value))
-    };
-}
+            .map(tag => new EventTagProfile(tag));
+    }
 
-const contacts = {
-    fromEvent,
+    get list(): EventTagProfile[] {
+        return this._list;
+    }
 }
-
-export default contacts;

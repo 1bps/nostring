@@ -3,27 +3,25 @@
     'note-layout-detail': detailMode
   }">
     <header>
-      <NuxtLink :to="`/p/${note.profile?.nip19}`" class="note-avatar">
-        <Avatar :image-url="note.profile?.avatar" />
+      <NuxtLink :to="`/p/${note.author?.nip19}`" class="note-avatar">
+        <Avatar :image-url="author?.avatar" />
       </NuxtLink>
       <NostringSpace class="header-content">
-        <NuxtLink :to="`/p/${note.profile?.nip19}`">
+        <NuxtLink :to="`/p/${author?.nip19}`">
           <NostringSpace class="id" gap="1" :vertical="detailMode">
             <NameDisplay>{{
-              note.profile?.displayName ||
-              note.profile?.name ||
-              note.profile?.pubkey.substr(0, 12)
+              note.author?.displayName ||
+              note.author?.name ||
+              note.author?.pubkey.substr(0, 12)
             }}</NameDisplay>
             <NostringSpace gap="1" style="align-items: center">
               <Name>{{
-                note.profile?.name ||
-                `${note.profile?.nip19.substr(4, 8)}:${note.profile?.nip19.substr(
-                  note.profile?.nip19.length - 8
+                note.author?.name ||
+                `${note.author?.nip19.substr(4, 8)}:${note.author?.nip19.substr(
+                  note.author?.nip19.length - 8
                 )}`
               }}</Name>
-              <Nip05 v-if="note.profile?.nip05" 
-              :profile="note.profile" :status="'loading'"
-              :show-detail="detailMode" />
+              <Nip05 v-if="note.author?.nip05" :profile="author" :status="'loading'" :show-detail="detailMode" />
             </NostringSpace>
           </NostringSpace>
         </NuxtLink>
@@ -103,14 +101,13 @@ import NostringText from "@/components/nostring/text.vue";
 import NostringSpace from "@/components/nostring/space.vue";
 import { NoteModel } from "~~/composables/model/note";
 import LightningInvoice from "@/components/lightning/invoice.vue";
-import { EventTagEvent } from "~~/composables/model/event/tag/event";
-import { EventTagProfile } from "~~/composables/model/event/tag/profile";
+import { EventTagEvent, EventTagProfile } from "~~/composables/model/event/tag";
 
 interface Props {
   mini?: boolean;
   note: NoteModel;
   showReplyings?: boolean;
-  detailMode?: false;
+  detailMode?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -118,15 +115,18 @@ const props = withDefaults(defineProps<Props>(), {
   showReplyings: false,
   datailMode: false,
 });
+
+const author = computed(() => props.note.author?.value);
+
 const Replying = {
   render: () => {
-    if (props.note.event?.tags.some(tag => {
+    if (props.note.e.tags.some(tag => {
       if (tag && tag.length >= 1 && tag[0] == 'e') {
         let ete = new EventTagEvent(tag);
         return ete.marker == 'root' || ete.marker == 'reply';
       }
     })) {
-      let eventTagProfiles: any[] = props.note.event?.tags
+      let eventTagProfiles: any[] = props.note.e.tags
         .filter(tag => tag && tag.length >= 2 && tag[0] == 'p')
         .map(tag => new EventTagProfile(tag));
 
@@ -217,7 +217,7 @@ const Text = {
 };
 
 const handleClick = () => {
-  console.info("note event", props.note.event);
+  console.info("note event", props.note.e);
 };
 </script>
 
@@ -269,6 +269,13 @@ const handleClick = () => {
   }
 
   &.note-layout-detail {
+    header {
+
+      .note-avatar {
+        position: inherit;
+      }
+    }
+
     .content {
       padding-left: 0;
 

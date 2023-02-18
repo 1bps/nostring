@@ -76,6 +76,7 @@ import {
     flex-direction: column;
     align-items: flex-end;
     user-select: none;
+    max-width: 33.33%;
 
     >nav {
       width: 275px;

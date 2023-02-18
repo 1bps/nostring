@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 </script>
 
-<style lang="scss" scope>
+<style lang="scss">
 .ns-card {
     padding: 15px;
     border-radius: 10px;

@@ -5,9 +5,8 @@
 </template>
 
 <script setup lang="ts">
-
-
-import * as nip19 from "nostr-tools/nip19";
+import { Kind, nip19 } from "nostr-tools";
+import { NoteModel } from "~~/composables/model/note";
 
 const route = useRoute();
 
@@ -18,6 +17,7 @@ let hex = "";
 
   if (/^n[A-Za-z0-9]+$/.test(id)) {
     let result = nip19.decode(id);
+
     if (result.type === "note") {
       hex = result.data as string;
     }
