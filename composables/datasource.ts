@@ -6,7 +6,6 @@ import { Event } from 'nostr-tools';
 import { EventModel } from "./model/event";
 import { Ref } from "nuxt/dist/app/compat/capi";
 import contacts, { ContactsModel } from "./model/contacts";
-import { takeCoverage } from "v8";
 import { EventTagEvent } from "./model/event/tag/event";
 
 const {
