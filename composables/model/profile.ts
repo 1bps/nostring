@@ -1,6 +1,5 @@
-import * as nip19 from "nostr-tools/nip19";
+import { nip19, Event } from "nostr-tools";
 import { EventModel } from "./event";
-import { Event } from 'nostr-tools';
 import { Ref } from "nuxt/dist/app/compat/capi";
 import { ContactsModel } from "./contacts";
 
@@ -36,7 +35,7 @@ const fromEvent = (e: Event): ProfileModel => {
         banner: content.banner,
         website: content.website,
         lud16: content.lud16,
-        contacts: computed(()=>datasource.getContacts(e.pubkey).data.value)
+        contacts: computed(() => datasource.getContacts(e.pubkey).data.value)
         // TODO relays 
     };
 }

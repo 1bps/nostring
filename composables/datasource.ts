@@ -1,4 +1,9 @@
-import * as _nostrTools from "nostr-tools";
+import {
+    SimplePool,
+    Kind,
+    nip05,
+    nip19,
+} from "nostr-tools";
 
 import profile, { ProfileModel } from "@/composables/model/profile";
 import note, { NoteModel } from "@/composables/model/note";
@@ -8,12 +13,7 @@ import { Ref } from "nuxt/dist/app/compat/capi";
 import contacts, { ContactsModel } from "./model/contacts";
 import { EventTagEvent } from "./model/event/tag/event";
 
-const {
-    SimplePool,
-    Kind,
-    nip05,
-    nip19,
-} = _nostrTools;
+console.log(SimplePool);
 
 const pool = new SimplePool();
 
@@ -126,14 +126,14 @@ let subEventHandler = (event: Event) => {
                     }
                 } else {
                     eventTags
-                    .filter(et => 
-                        et.marker === 'root' 
-                        || et.marker === 'reply')
-                    .forEach(et=>{
-                        // add
-                        let repliesCached = getCacheArray(repliesCache, et.id);
-                        repliesCached.data.value.push(noteModel);
-                    })
+                        .filter(et =>
+                            et.marker === 'root'
+                            || et.marker === 'reply')
+                        .forEach(et => {
+                            // add
+                            let repliesCached = getCacheArray(repliesCache, et.id);
+                            repliesCached.data.value.push(noteModel);
+                        })
                 }
             }
 

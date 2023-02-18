@@ -7,5 +7,8 @@ export default defineNuxtConfig({
                 type: 'text/css',
             }]
         }
+    },
+    build: {
+        transpile: ['nostr-tools']
     }
 })
