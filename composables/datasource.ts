@@ -6,6 +6,8 @@ import { Event } from 'nostr-tools';
 import { EventModel } from "./model/event";
 import { Ref } from "nuxt/dist/app/compat/capi";
 import contacts, { ContactsModel } from "./model/contacts";
+import { takeCoverage } from "v8";
+import { EventTagEvent } from "./model/event/tag/event";
 
 const {
     SimplePool,
@@ -23,6 +25,7 @@ const contactsCache: any = {};
 const noteOfProfileCache: any = {};
 const notesCache: any = {};
 const noteCache: any = {};
+const repliesCache: any = {};
 const eventCache: any = {};
 const nip05Cache: any = {};
 const floodContentMap: any = {};
@@ -98,19 +101,49 @@ let subEventHandler = (event: Event) => {
             let profileModel = profile.fromEvent(event);
             cached.data.value = profileModel;
         } else if (event.kind === Kind.Text) {
+            // global
             let cachedGlobal = getCacheArray(notesCache, '');
+
+            // author
             let cachedOfPubkey = getCacheArray(noteOfProfileCache, event.pubkey);
+
+            // note
             let noteModel = note.fromEvent(event);
             if (event.id) {
                 let cached = getNoteCached(event.id);
                 cached.data.value = noteModel;
             }
 
+            if (event.tags) {
+                let eventTags = event.tags
+                    .filter(tag => tag && tag.length >= 2 && tag[0] === 'e')
+                    .map(tag => new EventTagEvent(tag));
+                if (eventTags.length == 1) {
+                    // only one e tag as a reply for older version
+                    if (noteModel.content) {
+                        // add
+                        let repliesCached = getCacheArray(repliesCache, eventTags[0].id);
+                        repliesCached.data.value.push(noteModel);
+                    }
+                } else {
+                    eventTags
+                    .filter(et => 
+                        et.marker === 'root' 
+                        || et.marker === 'reply')
+                    .forEach(et=>{
+                        // add
+                        let repliesCached = getCacheArray(repliesCache, et.id);
+                        repliesCached.data.value.push(noteModel);
+                    })
+                }
+            }
+
+            // anti spam
             if (!isFlood(noteModel)) {
                 cachedGlobal.data.value.push(noteModel);
             }
             cachedOfPubkey.data.value.push(noteModel);
-        }else if(event.kind === Kind.Contacts){
+        } else if (event.kind === Kind.Contacts) {
             let cached = getContactsCached(event.pubkey);
             let contactsModel = contacts.fromEvent(event);
             cached.data.value = contactsModel;
@@ -238,8 +271,29 @@ const isFlood = (em: EventModel): boolean => {
     return isEventFlood(em.event);
 }
 
+const getReplies = (hex: string): Cached<NoteModel[]> => {
+    return getCacheArray(repliesCache, hex, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Text],
+            '#e': [hex],
+        }]);
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            // sub.unsub();
+        });
+    });
+}
+
 const datasource = {
-    checkNip05, getProfile, getNotes, getNotesOfPubkey, isFlood, getNote, getContacts
+    checkNip05,
+    getProfile,
+    getNotes,
+    getNotesOfPubkey,
+    isFlood,
+    getNote,
+    getContacts,
+    getReplies,
 }
 
 export default datasource;

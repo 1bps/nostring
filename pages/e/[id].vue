@@ -2,6 +2,7 @@
   <NuxtLayout name="primary">
     <ClientOnly>
       <Note :note="note" />
+      <Timeline :notes="replies" />
     </ClientOnly>
   </NuxtLayout>
 </template>
@@ -33,6 +34,7 @@ let hex = "";
 }
 
 const { data: note } = datasource.getNote(hex);
+const { data: replies } = datasource.getReplies(hex);
 </script>
 
 <script lang="ts"></script>
