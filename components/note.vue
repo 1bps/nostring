@@ -42,7 +42,7 @@
         <div class="meta"></div>
       </article>
       <aside>
-        <NostringText v-if="detailMode" type="tertiaty">
+        <NostringText v-if="detailMode" type="tertiary">
           <NostringTime :time="note.createdAt" />
         </NostringText>
         <div class="action">
