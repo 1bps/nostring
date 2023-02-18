@@ -3,30 +3,36 @@
     'note-layout-detail': detailMode
   }">
     <header>
-      <NuxtLink :to="`/p/${note.profile?.nip19}`">
+      <NuxtLink :to="`/p/${note.profile?.nip19}`" class="note-avatar">
         <Avatar :image-url="note.profile?.avatar" />
       </NuxtLink>
-      <NuxtLink :to="`/p/${note.profile?.nip19}`">
-        <NostringSpace class="id" gap="1" :vertical="detailMode">
-          <NameDisplay>{{
-            note.profile?.displayName ||
-            note.profile?.name ||
-            note.profile?.pubkey.substr(0, 12)
-          }}</NameDisplay>
-          <Name>{{
-            note.profile?.name ||
-            `${note.profile?.nip19.substr(4, 8)}:${note.profile?.nip19.substr(
-              note.profile?.nip19.length - 8
-            )}`
-          }}</Name>
-          <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'loading'" />
-        </NostringSpace>
-      </NuxtLink>
-      <NuxtLink v-if="!detailMode" :to="`/e/${note.nip19}`">
-        <NostringText>
-          <NostringTime :time="note.createdAt" relative />
-        </NostringText>
-      </NuxtLink>
+      <NostringSpace class="header-content">
+        <NuxtLink :to="`/p/${note.profile?.nip19}`">
+          <NostringSpace class="id" gap="1" :vertical="detailMode">
+            <NameDisplay>{{
+              note.profile?.displayName ||
+              note.profile?.name ||
+              note.profile?.pubkey.substr(0, 12)
+            }}</NameDisplay>
+            <NostringSpace gap="1" style="align-items: center">
+              <Name>{{
+                note.profile?.name ||
+                `${note.profile?.nip19.substr(4, 8)}:${note.profile?.nip19.substr(
+                  note.profile?.nip19.length - 8
+                )}`
+              }}</Name>
+              <Nip05 v-if="note.profile?.nip05" 
+              :profile="note.profile" :status="'loading'"
+              :show-detail="detailMode" />
+            </NostringSpace>
+          </NostringSpace>
+        </NuxtLink>
+        <NuxtLink v-if="!detailMode" :to="`/e/${note.nip19}`">
+          <NostringText>
+            <NostringTime :time="note.createdAt" relative />
+          </NostringText>
+        </NuxtLink>
+      </NostringSpace>
     </header>
     <div class="content">
       <article>
@@ -37,7 +43,7 @@
       </article>
       <aside>
         <NostringText v-if="detailMode" type="tertiaty">
-          <NostringTime :time="note.createdAt"/>
+          <NostringTime :time="note.createdAt" />
         </NostringText>
         <div class="action">
           <NostringButton text round type="tertiary">
@@ -83,10 +89,7 @@
 </template>
 
 <script setup lang="ts">
-
-
-
-
+import * as nip19 from "nostr-tools/nip19";
 import {
   ChatboxOutline,
   RepeatOutline,
@@ -94,7 +97,6 @@ import {
   FlashOutline,
   EllipsisHorizontalOutline,
 } from "@vicons/ionicons5";
-import * as nip19 from "nostr-tools/nip19";
 
 import Mention from "@/components/mention.vue";
 import NostringText from "@/components/nostring/text.vue";
@@ -226,14 +228,21 @@ const handleClick = () => {
   gap: 8px;
 
   header {
-    display: flex;
-    gap: 4px;
 
-    .avatar {
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
+    .note-avatar {
+      position: absolute;
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+      }
     }
+
+    .header-content {
+      margin-left: 56px;
+    }
+
   }
 
   .content {
