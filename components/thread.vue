@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="thread-current">
-            <Note :note="note" :show-replyings="false" />
+            <Note :note="note" :show-replyings="false" :detail-mode="true" />
         </div>
         <Timeline :notes="note.replies" :show-replyings="false" />
 </div>

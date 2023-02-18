@@ -1,11 +1,13 @@
 <template>
-  <div class="note">
-    <NuxtLink :to="`/p/${note.profile?.nip19}`">
-      <Avatar :image-url="note.profile?.avatar" />
-    </NuxtLink>
-    <div class="content">
-      <header>
-        <NostringSpace class="id" gap="1" style="align-items: center">
+  <div class="note" :class="{
+    'note-layout-detail': detailMode
+  }">
+    <header>
+      <NuxtLink :to="`/p/${note.profile?.nip19}`">
+        <Avatar :image-url="note.profile?.avatar" />
+      </NuxtLink>
+      <NuxtLink :to="`/p/${note.profile?.nip19}`">
+        <NostringSpace class="id" gap="1" :vertical="detailMode">
           <NameDisplay>{{
             note.profile?.displayName ||
             note.profile?.name ||
@@ -19,13 +21,14 @@
           }}</Name>
           <Nip05 v-if="note.profile?.nip05" :profile="note.profile" :status="'loading'" />
         </NostringSpace>
-
-        <NuxtLink :to="`/e/${note.nip19}`">
-          <NostringText>
-            <NostringTime :time="note.createdAt" relative />
-          </NostringText>
-        </NuxtLink>
-      </header>
+      </NuxtLink>
+      <NuxtLink v-if="!detailMode" :to="`/e/${note.nip19}`">
+        <NostringText>
+          <NostringTime :time="note.createdAt" relative />
+        </NostringText>
+      </NuxtLink>
+    </header>
+    <div class="content">
       <article>
         <Replying v-if="showReplyings" style="margin-bottom: 5px" />
         <Text />
@@ -33,6 +36,9 @@
         <div class="meta"></div>
       </article>
       <aside>
+        <NostringText v-if="detailMode" type="tertiaty">
+          <NostringTime :time="note.createdAt"/>
+        </NostringText>
         <div class="action">
           <NostringButton text round type="tertiary">
             <template #icon>
@@ -77,6 +83,10 @@
 </template>
 
 <script setup lang="ts">
+
+
+
+
 import {
   ChatboxOutline,
   RepeatOutline,
@@ -98,11 +108,13 @@ interface Props {
   mini?: boolean;
   note: NoteModel;
   showReplyings?: boolean;
+  detailMode?: false;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   mini: false,
   showReplyings: false,
+  datailMode: false,
 });
 const Replying = {
   render: () => {
@@ -210,26 +222,26 @@ const handleClick = () => {
 <style lang="scss">
 .note {
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   gap: 8px;
 
-  .avatar {
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
+  header {
+    display: flex;
+    gap: 4px;
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
   }
 
   .content {
-    flex-grow: 1;
+    padding-left: 56px;
     display: flex;
     flex-direction: column;
 
     gap: 5px;
-
-    header {
-      display: flex;
-      gap: 4px;
-    }
 
     article {
       .text {
@@ -243,6 +255,18 @@ const handleClick = () => {
         gap: 3px;
         justify-content: space-between;
         margin-left: -8px;
+      }
+    }
+  }
+
+  &.note-layout-detail {
+    .content {
+      padding-left: 0;
+
+      aside {
+        .action {
+          justify-content: space-around;
+        }
       }
     }
   }
