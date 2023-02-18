@@ -52,13 +52,16 @@
     <div class="bio">{{ profile.bio }}</div>
     <div class="meta">
       <NostringSpace gap="0">
-        <NostringButton tag="a" text v-if="profile.website" :href="profile.website" nofollow>
+
+        <NostringButton tag="span" text>
           <template #icon>
             <NostringIcon>
               <LinkOutline />
             </NostringIcon>
           </template>
-          {{ profile.website.replace(/https?:\/\//, "") }}
+          <NuxtLink v-if="profile.website" :to="profile.website">
+            {{ profile.website.replace(/https?:\/\//, "") }}
+          </NuxtLink>
         </NostringButton>
         <NostringButton text v-if="profile.lud16">
           <template #icon>
