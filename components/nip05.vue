@@ -4,7 +4,7 @@
     {
       'name-verified': verifiedWithName,
     },
-  ]" style="display: inline-flex">
+  ]" style="display: inline-flex; align-items: center;">
     <NostringIcon style="overflow:hidden">
       <CheckmarkCircle v-if="status === 'verified' && !verifiedWithName" />
       <CheckmarkDoneCircle v-if="status === 'verified' && verifiedWithName" />
