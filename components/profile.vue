@@ -71,8 +71,7 @@
       </NostringSpace>
     </div>
     <div class="stat">
-      {{ profile.contacts?.value?.event}}
-      {{ profile.contacts|| 0 }} <NostringText type="tertiary">Following</NostringText> 0
+      {{ followingNumber || 0 }} <NostringText type="tertiary">Following</NostringText> 0
       <NostringText type="tertiary">Follower </NostringText>
     </div>
 </div>
@@ -95,6 +94,10 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   mini: false,
 });
+
+const followingNumber = computed(() =>
+  props.profile.contacts?.list?.length
+);
 </script>
 
 <style lang="scss">
