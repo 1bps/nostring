@@ -1,13 +1,12 @@
 <template>
   <NuxtLayout name="primary">
-    <ClientOnly>
-      <Note :note="note" />
-      <Timeline :notes="replies" />
-    </ClientOnly>
-  </NuxtLayout>
+    <Thread :note="note" />
+</NuxtLayout>
 </template>
 
 <script setup lang="ts">
+
+
 import * as nip19 from "nostr-tools/nip19";
 
 const route = useRoute();
@@ -34,7 +33,6 @@ let hex = "";
 }
 
 const { data: note } = datasource.getNote(hex);
-const { data: replies } = datasource.getReplies(hex);
 </script>
 
 <script lang="ts"></script>
@@ -52,8 +50,7 @@ const { data: replies } = datasource.getReplies(hex);
       border-bottom: 1px solid #123;
     }
 
-    .note {
-    }
+    .note {}
   }
 }
 </style>

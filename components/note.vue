@@ -27,7 +27,7 @@
         </NuxtLink>
       </header>
       <article>
-        <Replying style="margin-bottom: 5px" />
+        <Replying v-if="showReplyings" style="margin-bottom: 5px" />
         <Text />
         <div class="embeded"></div>
         <div class="meta"></div>
@@ -40,6 +40,7 @@
                 <ChatboxOutline />
               </NostringIcon>
             </template>
+            {{ note.replies?.length || '' }}
           </NostringButton>
           <NostringButton text round type="tertiary">
             <template #icon>
@@ -96,10 +97,12 @@ import { EventTagProfile } from "~~/composables/model/event/tag/profile";
 interface Props {
   mini?: boolean;
   note: NoteModel;
+  showReplyings?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   mini: false,
+  showReplyings: false,
 });
 const Replying = {
   render: () => {

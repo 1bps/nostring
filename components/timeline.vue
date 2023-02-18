@@ -1,7 +1,7 @@
 <template>
     <div class="timeline">
         <div v-for="(note, noteIndex) in notes" :key="noteIndex" class="item">
-            <Note :note="note" />
+            <Note :note="note" :show-replyings="showReplyings" />
         </div>
     </div>
 </template>
@@ -11,9 +11,11 @@ import { NoteModel } from "~~/composables/model/note";
 
 interface Props {
   notes: NoteModel[];
+  showReplyings?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+    showReplyings: false,
 });
 </script>
 

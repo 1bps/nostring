@@ -1,12 +1,18 @@
 <template>
     <div>
-        <Note :note="note" />
-    </div>
+        <div class="thread-current">
+            <Note :note="note" :show-replyings="false" />
+        </div>
+        <Timeline :notes="note.replies" :show-replyings="false" />
+</div>
 </template>
   
 <script setup lang="ts">
+
+
+
 interface Props {
-  note: NoteModel;
+    note: NoteModel;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -16,20 +22,9 @@ const props = withDefaults(defineProps<Props>(), {
 <script lang="ts"></script>
   
 <style lang="scss">
-.timeline {
-    display: flex;
-    flex-direction: column;
-
-    .item {
-        border-top: 1px solid #123;
-        padding: 10px;
-
-        &:last-child {
-            border-bottom: 1px solid #123;
-        }
-
-        .note {}
-    }
+.thread-current {
+    border-top: 1px solid #123;
+    padding: 10px;
 }
 </style>
   

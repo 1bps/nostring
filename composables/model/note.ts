@@ -9,6 +9,7 @@ export interface NoteModel extends EventModel {
     nip19?: string;
     content?: string;
     profile?: Ref<ProfileModel>;
+    replies?: Ref<NoteModel[]>;
 }
 
 const fromEvent = (e: Event): NoteModel => {
@@ -19,6 +20,7 @@ const fromEvent = (e: Event): NoteModel => {
         createdAt: new Date(e.created_at * 1000),
         content: e.content,
         profile: computed(() => datasource.getProfile(e.pubkey).data.value),
+        replies: computed(() => e.id ? datasource.getReplies(e.id).data.value : <NoteModel[]>[])
     };
 }
 
