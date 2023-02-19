@@ -14,10 +14,10 @@
       <span v-if="verifiedWithName && showDetail">@</span>
     </NostringIcon>
     <template v-if="verifiedWithName && showDetail">
-      {{ profile?.nip05.replace(new RegExp(`${profile?.name}@`, 'ig'), "").replace(`_@`, "") }}
+      {{ profile?.metadata?.nip05.replace(new RegExp(`${profile?.metadata?.name}@`, 'ig'), "").replace(`_@`, "") }}
     </template>
     <template v-if="!verifiedWithName && showDetail">
-      {{ profile?.nip05?.replace('_@', "") }}
+      {{ profile?.metadata?.nip05?.replace('_@', "") }}
     </template>
 
 </NostringText>
@@ -44,13 +44,15 @@ const props = withDefaults(defineProps<Props>(), {
   showDetail: false,
 });
 
-const status = computed(() => props.profile.nip05Status.value || props.defaultStatus);
+const status = computed(() => props.defaultStatus);
+
+// const status = computed(() => props.profile.nip05Status.value || props.defaultStatus);
 
 const verifiedWithName = computed(
   () =>
     status.value == "verified" &&
-    ((props.profile?.name
-      && props.profile?.nip05?.toLowerCase().startsWith(props.profile?.name.toLowerCase())) || props.profile?.nip05?.startsWith("_@"))
+    ((props.profile?.metadata?.name
+      && props.profile?.metadata?.nip05?.toLowerCase().startsWith(props.profile?.metadata?.name.toLowerCase())) || props.profile?.metadata?.nip05?.startsWith("_@"))
 );
 </script>
 

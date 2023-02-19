@@ -1,18 +1,18 @@
 <template>
   <div class="profile">
     <header :class="{
-      'with-banner': !!profile.banner,
+      'with-banner': !!profile.metadata?.banner,
     }">
-      <div v-if="profile.banner" class="banner" :style="{
-        background: profile.banner
-          ? `url(${profile.banner}) no-repeat center center`
+      <div v-if="profile.metadata?.banner" class="banner" :style="{
+        background: profile.metadata?.banner
+          ? `url(${profile.metadata?.banner}) no-repeat center center`
           : `#667`,
-        backgroundSize: profile.banner ? 'cover' : undefined,
+        backgroundSize: profile.metadata?.banner ? 'cover' : undefined,
       }" />
       <div class="content">
         <NostringSpace>
           <div class="avatar-wrapper">
-            <Avatar :image-url="profile.avatar" />
+            <Avatar :image-url="profile.metadata?.picture" />
           </div>
           <div class="actions">
             <NostringButton text round>
@@ -41,34 +41,34 @@
         </NostringSpace>
         <NameDisplay header :profile="profile" />
         <NostringSpace gap="0" style="align-items: center">
-          <Name :value="profile.name || profile.pubkey.substr(0, 12)" />
-          <Nip05 v-if="profile.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
+          <Name :value="profile.metadata?.name || profile.pubkey?.substr(0, 12)" />
+          <Nip05 v-if="profile.metadata?.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
         </NostringSpace>
         <div>
-          <Key :nip19="profile.nip19" />
+          <Key v-if="profile.nip19" :nip19="profile.nip19" />
         </div>
       </div>
     </header>
-    <div class="bio">{{ profile.bio }}</div>
+    <div class="bio">{{ profile.metadata?.about }}</div>
     <div class="meta">
       <NostringSpace gap="0">
-        <NostringButton v-if="profile.website" tag="span" text>
+        <NostringButton v-if="profile.metadata?.website" tag="span" text>
           <template #icon>
             <NostringIcon>
               <LinkOutline />
             </NostringIcon>
           </template>
-          <NuxtLink :to="profile.website">
-            {{ profile.website.replace(/https?:\/\//, "") }}
+          <NuxtLink :to="profile.metadata?.website">
+            {{ profile.metadata?.website.replace(/https?:\/\//, "") }}
           </NuxtLink>
         </NostringButton>
-        <NostringButton text v-if="profile.lud16">
+        <NostringButton text v-if="profile.metadata?.lud16">
           <template #icon>
             <NostringIcon>
               <FlashOutline />
             </NostringIcon>
           </template>
-          {{ profile.lud16 }}
+          {{ profile.metadata?.lud16 }}
         </NostringButton>
       </NostringSpace>
     </div>
@@ -98,7 +98,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const followingNumber = computed(() =>
-  props.profile.contacts?.value?.list?.length
+  props.profile.contacts?.list?.length
 );
 </script>
 

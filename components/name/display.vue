@@ -19,9 +19,9 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const display = computed(() => {
-  let v = props.value || props.profile?.displayName || props.profile?.name;
+  let v = props.value || props.profile?.metadata?.display_name || props.profile?.metadata?.name;
   if (!v && props.profile?.nip05Status?.value === 'verified') {
-    let nip05Id = props.profile?.nip05;
+    let nip05Id = props.profile?.metadata?.nip05;
     if (nip05Id?.startsWith('_@')) {
       v = nip05Id?.replace('_@', '');
     } else {
@@ -31,7 +31,7 @@ const display = computed(() => {
   if (v) {
     return v;
   }
-  return props.profile?.pubkey.substring(0, 12);
+  return props.profile?.pubkey?.substring(0, 12);
 });
 </script>
 

@@ -2,14 +2,15 @@ import {
     SimplePool,
     Kind,
     nip05,
+    nip19
 } from "nostr-tools";
 
-import { ProfileModel } from "@/composables/model/profile";
-import { NoteModel } from "@/composables/model/note";
+import { createProfileModel, ProfileModel } from "@/composables/model/profile";
+import { NoteModel, createNoteModel } from "@/composables/model/note";
 import { Event } from 'nostr-tools';
 import { EventModel } from "./model/event";
 import { Ref } from "nuxt/dist/app/compat/capi";
-import { ContactsModel } from "./model/contacts";
+import { ContactsModel, createContactsModel } from "./model/contacts";
 import { EventTagEvent } from "./model/event/tag";
 
 const pool = new SimplePool();
@@ -63,12 +64,9 @@ let getCacheData = <T>(cache: any, key: string,
 let getProfileCached = (pubkey: string,
     update?: CacheUpdate<ProfileModel>): Cached<ProfileModel> => {
     return getCacheData(profileCache, pubkey, {
-        create: () => new ProfileModel({
-            kind: Kind.Metadata,
-            pubkey: pubkey,
-            tags: [],
-            content: '',
-            created_at: 0
+        create: () => ({
+            pubkey,
+            nip19: nip19.npubEncode(pubkey)
         }),
         update
     });
@@ -77,12 +75,8 @@ let getProfileCached = (pubkey: string,
 let getContactsCached = (pubkey: string,
     update?: CacheUpdate<ContactsModel>): Cached<ContactsModel> => {
     return getCacheData(contactsCache, pubkey, {
-        create: () => new ContactsModel({
-            kind: Kind.Contacts,
-            pubkey: pubkey,
-            tags: [],
-            content: '',
-            created_at: 0
+        create: () => ({
+            pubkey
         }),
         update
     });
@@ -91,13 +85,8 @@ let getContactsCached = (pubkey: string,
 let getNoteCached = (id: string,
     update?: CacheUpdate<NoteModel>): Cached<NoteModel> => {
     return getCacheData(noteCache, id, {
-        create: () => new NoteModel({
-            id: id,
-            kind: Kind.Text,
-            pubkey: '',
-            tags: [],
-            content: '',
-            created_at: 0
+        create: () => ({
+            id
         }),
         update
     });
@@ -107,21 +96,20 @@ let subEventHandler = (event: Event) => {
     try {
         if (event.kind === Kind.Metadata) {
             let cached = getProfileCached(event.pubkey);
-            let profileModel = new ProfileModel(event);
-            cached.data.value = profileModel;
+            cached.data.value = createProfileModel(event).value;
         } else if (event.kind === Kind.Text) {
+            if (!event.id) {
+                return;
+            }
+            let cached = getNoteCached(event.id);
+            let noteModel = createNoteModel(event).value;
+            cached.data.value = noteModel;
+
             // global
             let cachedGlobal = getCacheArray(notesCache, '');
 
             // author
             let cachedOfPubkey = getCacheArray(noteOfProfileCache, event.pubkey);
-
-            // note
-            let noteModel = new NoteModel(event);
-            if (event.id) {
-                let cached = getNoteCached(event.id);
-                cached.data.value = noteModel;
-            }
 
             if (event.tags) {
                 let eventTags = event.tags
@@ -154,7 +142,7 @@ let subEventHandler = (event: Event) => {
             cachedOfPubkey.data.value.push(noteModel);
         } else if (event.kind === Kind.Contacts) {
             let cached = getContactsCached(event.pubkey);
-            let contactsModel = new ContactsModel(event);
+            let contactsModel = createContactsModel(event).value;
             cached.data.value = contactsModel;
         }
     } catch (e) {
@@ -277,7 +265,7 @@ const isEventFlood = (event: any): boolean => {
 }
 
 const isFlood = (em: EventModel): boolean => {
-    return isEventFlood(em.e);
+    return isEventFlood(em.event);
 }
 
 const getReplies = (hex: string): Cached<NoteModel[]> => {

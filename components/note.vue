@@ -4,24 +4,25 @@
   }">
     <header>
       <NuxtLink :to="`/p/${note.author?.nip19}`" class="note-avatar">
-        <Avatar :image-url="author?.avatar" />
+        <Avatar :image-url="note.author?.metadata?.picture" />
       </NuxtLink>
       <NostringSpace class="header-content">
-        <NuxtLink :to="`/p/${author?.nip19}`">
+        <NuxtLink :to="`/p/${note.author?.nip19}`">
           <NostringSpace class="id" gap="1" :vertical="detailMode">
             <NameDisplay>{{
-              note.author?.displayName ||
-              note.author?.name ||
-              note.author?.pubkey.substr(0, 12)
+              note.author?.metadata?.display_name ||
+              note.author?.metadata?.name ||
+              note.author?.pubkey?.substring(0, 12)
             }}</NameDisplay>
             <NostringSpace gap="1" style="align-items: center">
               <Name>{{
-                note.author?.name ||
-                `${note.author?.nip19.substr(4, 8)}:${note.author?.nip19.substr(
-                  note.author?.nip19.length - 8
+                note.author?.metadata?.name ||
+                `${note.author?.nip19?.substr(4, 8)}:${note.author?.nip19?.substr(
+                  note.author?.nip19?.length - 8
                 )}`
               }}</Name>
-              <Nip05 v-if="note.author?.nip05" :profile="author" :status="'loading'" :show-detail="detailMode" />
+              <Nip05 v-if="note.author?.metadata?.nip05" :profile="note.author" :status="'loading'"
+                :show-detail="detailMode" />
             </NostringSpace>
           </NostringSpace>
         </NuxtLink>
@@ -41,7 +42,7 @@
       </article>
       <aside>
         <NostringText v-if="detailMode" type="tertiary">
-          <NostringTime :time="note.createdAt" />
+          <NostringTime :time="note.createdAt" relative />
         </NostringText>
         <div class="action">
           <NostringButton text round type="tertiary">
@@ -116,17 +117,15 @@ const props = withDefaults(defineProps<Props>(), {
   datailMode: false,
 });
 
-const author = computed(() => props.note.author?.value);
-
 const Replying = {
   render: () => {
-    if (props.note.e.tags.some(tag => {
+    if (props.note.event?.tags.some(tag => {
       if (tag && tag.length >= 1 && tag[0] == 'e') {
         let ete = new EventTagEvent(tag);
         return ete.marker == 'root' || ete.marker == 'reply';
       }
     })) {
-      let eventTagProfiles: any[] = props.note.e.tags
+      let eventTagProfiles: any[] = props.note.event?.tags
         .filter(tag => tag && tag.length >= 2 && tag[0] == 'p')
         .map(tag => new EventTagProfile(tag));
 
@@ -217,7 +216,7 @@ const Text = {
 };
 
 const handleClick = () => {
-  console.info("note event", props.note.e);
+  console.info("note event", props.note.event);
 };
 </script>
 
@@ -272,7 +271,6 @@ const handleClick = () => {
     header {
 
       .note-avatar {
-        position: inherit;
       }
     }
 

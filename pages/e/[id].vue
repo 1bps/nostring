@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { Kind, nip19 } from "nostr-tools";
-import { NoteModel } from "~~/composables/model/note";
+import { nip19 } from "nostr-tools";
 
 const route = useRoute();
 
@@ -36,21 +35,3 @@ const { data: note } = datasource.getNote(hex);
 </script>
 
 <script lang="ts"></script>
-
-<style lang="scss">
-.timeline {
-  display: flex;
-  flex-direction: column;
-
-  .item {
-    border-top: 1px solid #123;
-    padding: 10px;
-
-    &:last-child {
-      border-bottom: 1px solid #123;
-    }
-
-    .note {}
-  }
-}
-</style>
