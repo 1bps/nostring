@@ -42,7 +42,7 @@
       </article>
       <aside>
         <NostringText v-if="detailMode" type="tertiary">
-          <NostringTime :time="note.createdAt" relative />
+          <NostringTime :time="note.createdAt" />
         </NostringText>
         <div class="action">
           <NostringButton text round type="tertiary">
