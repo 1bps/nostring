@@ -2,7 +2,7 @@
   <NuxtLayout name="primary">
     <ClientOnly>
       <Profile :profile="profile" />
-      <Timeline :notes="notes.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))" />
+      <Timeline :notes="notes.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))" :show-replyings="true"/>
     </ClientOnly>
 </NuxtLayout>
 </template>

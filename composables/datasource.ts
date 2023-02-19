@@ -29,7 +29,7 @@ const floodContentMap: any = {};
 
 interface Cached<T> {
     data: Ref<T>;
-    lastUpdate?: Date;
+    expiredAt?: number;
 }
 type CacheUpdate<T> = {
     (key: string,
@@ -52,8 +52,10 @@ let getCacheData = <T>(cache: any, key: string,
     handler: CacheHandler<T>): Cached<T> => {
     let cached = cache[key];
     if (!cached) {
-        cached = { data: ref<T>(handler.create()) };
+        cached = { data: ref<T>(handler.create()), expiredAt: Date.now() };
         cache[key] = cached;
+    }
+    if (cached.expiredAt < 0 || cached.expiredAt <= Date.now()) {
         if (process.client) {
             handler.update && handler.update(key, cached);
         }
@@ -97,6 +99,7 @@ let subEventHandler = (event: Event) => {
         if (event.kind === Kind.Metadata) {
             let cached = getProfileCached(event.pubkey);
             cached.data.value = createProfileModel(event).value;
+            cached.expiredAt = Date.now() + 60 * 1000 * 5;
         } else if (event.kind === Kind.Text) {
             if (!event.id) {
                 return;
@@ -104,7 +107,7 @@ let subEventHandler = (event: Event) => {
             let cached = getNoteCached(event.id);
             let noteModel = createNoteModel(event).value;
             cached.data.value = noteModel;
-
+            cached.expiredAt = Date.now() + 60 * 1000 * 5;
             // global
             let cachedGlobal = getCacheArray(notesCache, '');
 
@@ -144,6 +147,7 @@ let subEventHandler = (event: Event) => {
             let cached = getContactsCached(event.pubkey);
             let contactsModel = createContactsModel(event).value;
             cached.data.value = contactsModel;
+            cached.expiredAt = Date.now() + 60 * 1000 * 5;
         }
     } catch (e) {
         console.log('error when handle event', e);
@@ -163,6 +167,8 @@ const checkNip05 = (pubkey: string, identity: string): Cached<string> => {
                 }
             }).catch(() => {
                 cached.data.value = 'fail';
+            }).finally(() => {
+                cached.expiredAt = Date.now() + 1000 * 60 * 5;
             });
         }
     });

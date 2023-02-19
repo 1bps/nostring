@@ -42,7 +42,7 @@
         <NameDisplay header :profile="profile" />
         <NostringSpace gap="0" style="align-items: center">
           <Name :value="profile.metadata?.name || profile.pubkey?.substr(0, 12)" />
-          <Nip05 v-if="profile.metadata?.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
+          <Nip05 v-if="profile.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
         </NostringSpace>
         <div>
           <Key v-if="profile.nip19" :nip19="profile.nip19" />

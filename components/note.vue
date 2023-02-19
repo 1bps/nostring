@@ -270,8 +270,7 @@ const handleClick = () => {
   &.note-layout-detail {
     header {
 
-      .note-avatar {
-      }
+      .note-avatar {}
     }
 
     .content {

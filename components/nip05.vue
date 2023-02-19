@@ -44,9 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   showDetail: false,
 });
 
-const status = computed(() => props.defaultStatus);
-
-// const status = computed(() => props.profile.nip05Status.value || props.defaultStatus);
+const status = computed(() => props.profile?.nip05?.status || props.defaultStatus);
 
 const verifiedWithName = computed(
   () =>
