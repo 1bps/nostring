@@ -12,11 +12,12 @@ export interface NoteModel extends EventModel {
 }
 
 export function createNoteModel(e: Event): Ref<NoteModel> {
-    let { id, event, createdAt } = createEventModel(e).value;
+    let { id, event, pubkey, createdAt } = createEventModel(e).value;
     return ref({
         id,
         event,
-        createdAt: computed(() => new Date((e.created_at || 0) / 1000)),
+        pubkey,
+        createdAt,
         nip19: computed(() => e.id ? nip19.noteEncode(e.id) : ''),
         content: computed(() => e.content),
         author: computed(() => datasource.getProfile(e.pubkey).data.value),
