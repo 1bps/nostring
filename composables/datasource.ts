@@ -111,9 +111,6 @@ let subEventHandler = (event: Event) => {
             // global
             let cachedGlobal = getCacheArray(notesCache, '');
 
-            // author
-            let cachedOfPubkey = getCacheArray(noteOfProfileCache, event.pubkey);
-
             if (event.tags) {
                 let eventTags = event.tags
                     .filter(tag => tag && tag.length >= 2 && tag[0] === 'e')
@@ -123,7 +120,11 @@ let subEventHandler = (event: Event) => {
                     if (noteModel.content) {
                         // add
                         let repliesCached = getCacheArray(repliesCache, eventTags[0].id);
-                        repliesCached.data.value.push(noteModel);
+                        if (!repliesCached.data.value.some((n: any) => n.id === event.id)) {
+                            repliesCached.data.value.push(noteModel);
+                        }
+                    } else {
+                        // TODO repost
                     }
                 } else {
                     eventTags
@@ -133,16 +134,20 @@ let subEventHandler = (event: Event) => {
                         .forEach(et => {
                             // add
                             let repliesCached = getCacheArray(repliesCache, et.id);
-                            repliesCached.data.value.push(noteModel);
+                            if (!repliesCached.data.value.some((n: any) => n.id === event.id)) {
+                                repliesCached.data.value.push(noteModel);
+                            }
+
                         })
                 }
             }
 
             // anti spam
             if (!isFlood(noteModel)) {
-                cachedGlobal.data.value.push(noteModel);
+                if (cachedGlobal.data.value.indexOf(noteModel) == -1) {
+                    cachedGlobal.data.value.push(noteModel);
+                }
             }
-            cachedOfPubkey.data.value.push(noteModel);
         } else if (event.kind === Kind.Contacts) {
             let cached = getContactsCached(event.pubkey);
             let contactsModel = createContactsModel(event).value;
