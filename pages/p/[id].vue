@@ -30,10 +30,6 @@ let hex = "";
   } else {
     console.error("unknown id:", id);
   }
-
-  if (hex) {
-    console.info("hex", hex);
-  }
 }
 
 const { data: profile } = datasource.getProfile(hex);
