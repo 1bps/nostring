@@ -28,14 +28,6 @@
           </template>
           <NostringText class="nav-item-label">Messages</NostringText>
         </NostringButton>
-        <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
-          <template #icon>
-            <NostringIcon>
-              <NotificationsOutline />
-            </NostringIcon>
-          </template>
-          <NostringText class="nav-item-label">Notifications</NostringText>
-        </NostringButton>
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
@@ -44,6 +36,50 @@
           </template>
           <NostringText class="nav-item-label">Channels</NostringText>
         </NostringButton>
+        <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
+          <template #icon>
+            <NostringIcon>
+              <NotificationsOutline />
+            </NostringIcon>
+          </template>
+          <NostringText class="nav-item-label">Notifications</NostringText>
+        </NostringButton>
+        <NuxtLink v-if="auth.currentIdentity" :to="`/p/${auth.currentProfile?.nip19}`">
+          <NostringButton size="xl" justify="flex-start" text>
+            <template #icon>
+              <NostringIcon>
+                <PersonOutline />
+              </NostringIcon>
+            </template>
+            <NostringText class="nav-item-label">Profile</NostringText>
+          </NostringButton>
+        </NuxtLink>
+      </nav>
+
+      <nav style="position:absolute; bottom: 10px">
+        <div>
+          <div style="position: absolute">
+            <Avatar :image-url="auth.currentProfile?.metadata?.picture" style="width: 48px;
+            height: 48px;" />
+          </div>
+          <NostringSpace class="id" gap="1" vertical style="padding-left: 56px">
+            <NameDisplay>{{
+              auth.currentProfile?.metadata?.display_name ||
+              auth.currentProfile?.metadata?.name ||
+              auth.currentProfile?.pubkey?.substring(0, 12)
+            }}</NameDisplay>
+            <NostringSpace gap="1" style="align-items: center">
+              <Name>{{
+                auth.currentProfile?.metadata?.name ||
+                `${auth.currentProfile?.nip19?.substr(4, 8)}:${auth.currentProfile?.nip19?.substr(
+                  auth.currentProfile?.nip19?.length - 8
+                )}`
+              }}</Name>
+              <Nip05 v-if="auth.currentProfile?.metadata?.nip05" :profile="auth.currentProfile" :status="'loading'"
+                :show-detail="false" />
+            </NostringSpace>
+          </NostringSpace>
+        </div>
       </nav>
     </header>
     <main role="main">
@@ -53,12 +89,14 @@
 </template>
 
 <script setup lang="ts">
+
 import {
   HomeOutline,
   SearchOutline,
   MailOutline,
   NotificationsOutline,
   PeopleOutline,
+  PersonOutline
 } from "@vicons/ionicons5";
 
 const auth = useAuth();

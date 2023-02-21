@@ -52,9 +52,16 @@ export function logout(pubkey: string) {
     save();
 }
 
+let currentIdentity = computed(() => holder.value.currentIdentityIndex >= 0 && holder.value.currentIdentityIndex < holder.value.identites.length ? holder.value.identites[holder.value.currentIdentityIndex] : undefined);
+
+let currentProfile = computed(() => currentIdentity.value?.pubkey
+    ? datasource.getProfile(currentIdentity.value?.pubkey).data.value
+    : undefined);
+
 const auth = reactive({
     login,
-    currentIdentity: computed(() => holder.value.currentIdentityIndex >= 0 && holder.value.currentIdentityIndex < holder.value.identites.length ? holder.value.identites[holder.value.currentIdentityIndex] : undefined)
+    currentIdentity,
+    currentProfile,
 });
 
 export const useAuth = () => auth;

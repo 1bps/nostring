@@ -15,28 +15,33 @@
             <Avatar :image-url="profile.metadata?.picture" />
           </div>
           <div class="actions">
-            <NostringButton text round>
-              <template #icon>
-                <NostringIcon>
-                  <EllipsisHorizontalOutline />
-                </NostringIcon>
-              </template>
-            </NostringButton>
-            <NostringButton text round>
-              <template #icon>
-                <NostringIcon>
-                  <FlashOutline />
-                </NostringIcon>
-              </template>
-            </NostringButton>
-            <NostringButton text round>
-              <template #icon>
-                <NostringIcon>
-                  <MailOutline />
-                </NostringIcon>
-              </template>
-            </NostringButton>
-            <NostringButton round primary type="primary">Follow</NostringButton>
+            <template v-if="!isMe">
+              <NostringButton text round>
+                <template #icon>
+                  <NostringIcon>
+                    <EllipsisHorizontalOutline />
+                  </NostringIcon>
+                </template>
+              </NostringButton>
+              <NostringButton text round>
+                <template #icon>
+                  <NostringIcon>
+                    <FlashOutline />
+                  </NostringIcon>
+                </template>
+              </NostringButton>
+              <NostringButton text round>
+                <template #icon>
+                  <NostringIcon>
+                    <MailOutline />
+                  </NostringIcon>
+                </template>
+              </NostringButton>
+              <NostringButton round primary type="primary">Follow</NostringButton>
+            </template>
+            <template v-else>
+              <NostringButton round primary type="primary">Edit Profile</NostringButton>
+            </template>
           </div>
         </NostringSpace>
         <NameDisplay header :profile="profile" />
@@ -80,6 +85,10 @@
 </template>
 
 <script setup lang="ts">
+
+
+
+
 import {
   FlashOutline,
   MailOutline,
@@ -97,9 +106,13 @@ const props = withDefaults(defineProps<Props>(), {
   mini: false,
 });
 
+const auth = useAuth();
+
 const followingNumber = computed(() =>
   props.profile.contacts?.list?.length
 );
+
+const isMe = computed(() => props.profile?.pubkey && props.profile?.pubkey === auth.currentProfile?.pubkey);
 </script>
 
 <style lang="scss">

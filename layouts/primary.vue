@@ -44,6 +44,7 @@
 import {
   LogoGithub
 } from "@vicons/ionicons5";
+import { useAuth } from "~~/composables/user-config";
 
 const auth = useAuth();
 
