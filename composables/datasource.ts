@@ -15,7 +15,15 @@ import { EventTagEvent } from "./model/event/tag";
 
 const pool = new SimplePool();
 
-const DEFAULT_RELAYS = ["wss://relay.damus.io", "wss://relay.1bps.io"];
+const DEFAULT_RELAYS = [
+    "wss://nostr.zebedee.cloud",
+    "wss://nostr.bingtech.tk",
+    "wss://nostr-pub.semisol.dev",
+    "wss://relay.1bps.io",
+    "wss://relay.damus.io",
+    "wss://relay.nostr.info",
+    "wss://relay.snort.social",
+];
 
 const profileCache: any = {};
 const contactsCache: any = {};
