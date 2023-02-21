@@ -8,13 +8,16 @@
 
         <NostringSpace justify="flex-end">
             <NostringButton round @click="generate">Generate New One</NostringButton>
-            <NostringButton type="primary" round>Start Nostring</NostringButton>
+            <NostringButton type="primary" round @click="handleStart">Start Nostring</NostringButton>
         </NostringSpace>
 </NostringSpace>
 </template>
 
 <script setup lang="ts">
+
 import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools'
+
+const auth = useAuth();
 
 const privateKey = ref('');
 const publicKey = computed(() => privateKey.value && getPublicKey(privateKey.value));
@@ -26,4 +29,8 @@ const generate = () => {
 }
 
 generate();
+
+const handleStart = () => {
+    auth.login({ pubkey: publicKey.value, seckey: privateKey.value });
+}
 </script>

@@ -5,13 +5,16 @@ export interface Identity {
     seckey?: string;
 }
 
-const holder = reactive({
+const holder = ref({
     identites: [] as Identity[],
     currentIdentityIndex: -1,
 });
 
 if (!process || !process.server) {
-    const settings = localStorage.getItem("nostring");
+    let settings = localStorage.getItem("nostring");
+    if (settings) {
+        holder.value = { ...JSON.parse(settings) };
+    }
 }
 
 export function login(identity: Identity) {
@@ -21,9 +24,9 @@ export function login(identity: Identity) {
     if (!identity.pubkey && identity.seckey) {
         identity.pubkey = getPublicKey(identity.seckey);
     }
-    holder.identites.push(identity);
-    if (holder.currentIdentityIndex < 0 && holder.identites.length > 0) {
-        holder.currentIdentityIndex = 0;
+    holder.value.identites.push(identity);
+    if (holder.value.currentIdentityIndex < 0 && holder.value.identites.length > 0) {
+        holder.value.currentIdentityIndex = 0;
     }
 
     save();
@@ -36,14 +39,14 @@ function save() {
 }
 
 export function logout(pubkey: string) {
-    let index = holder.identites.findIndex(identity => identity.pubkey === pubkey);
+    let index = holder.value.identites.findIndex(identity => identity.pubkey === pubkey);
 
     if (index) {
-        holder.identites.slice(index, 1);
+        holder.value.identites.slice(index, 1);
     }
 
-    if (holder.identites.length <= holder.currentIdentityIndex) {
-        holder.currentIdentityIndex = holder.identites.length - 1;
+    if (holder.value.identites.length <= holder.value.currentIdentityIndex) {
+        holder.value.currentIdentityIndex = holder.value.identites.length - 1;
     }
 
     save();
@@ -51,7 +54,7 @@ export function logout(pubkey: string) {
 
 const auth = reactive({
     login,
-    currentIdentity: computed(() => holder.currentIdentityIndex > 0 && holder.currentIdentityIndex < holder.identites.length ? holder.identites[holder.currentIdentityIndex] : undefined)
+    currentIdentity: computed(() => holder.value.currentIdentityIndex >= 0 && holder.value.currentIdentityIndex < holder.value.identites.length ? holder.value.identites[holder.value.currentIdentityIndex] : undefined)
 });
 
 export const useAuth = () => auth;

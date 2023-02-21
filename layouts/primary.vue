@@ -6,7 +6,7 @@
       </div>
       <aside class="sidebar">
         <nav>
-          <NostringCard>
+          <NostringCard v-if="!auth.currentIdentity">
             <NostringSpace vertical gap="10">
               <NostringText type="primary">Start Nostring</NostringText>
               <NostringButton round size="l">Login with npub/nsec</NostringButton>
@@ -45,12 +45,14 @@ import {
   LogoGithub
 } from "@vicons/ionicons5";
 
+const auth = useAuth();
+
 const showGenModal = ref(false);
 
 const handleGenerate = () => {
   showGenModal.value = true;
-
 }
+
 </script>
 
 <style lang="scss">

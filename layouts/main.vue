@@ -20,7 +20,7 @@
           </template>
           <NostringText class="nav-item-label">Discovery</NostringText>
         </NostringButton>
-        <NostringButton size="xl" justify="flex-start" text>
+        <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
               <MailOutline />
@@ -28,7 +28,7 @@
           </template>
           <NostringText class="nav-item-label">Messages</NostringText>
         </NostringButton>
-        <NostringButton size="xl" justify="flex-start" text>
+        <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
               <NotificationsOutline />
@@ -49,7 +49,7 @@
     <main role="main">
       <slot />
     </main>
-  </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -60,6 +60,8 @@ import {
   NotificationsOutline,
   PeopleOutline,
 } from "@vicons/ionicons5";
+
+const auth = useAuth();
 </script>
 
 <style lang="scss">
