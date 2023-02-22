@@ -23,7 +23,7 @@
                   </NostringIcon>
                 </template>
               </NostringButton>
-              <NostringButton text round>
+              <NostringButton v-if="profile.metadata?.lud16" text round>
                 <template #icon>
                   <NostringIcon>
                     <FlashOutline />
