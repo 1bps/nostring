@@ -31,6 +31,6 @@ const generate = () => {
 generate();
 
 const handleStart = () => {
-    auth.login({ pubkey: publicKey.value, seckey: privateKey.value });
+    auth.login({ pubkey: publicKey.value, seckey: privateKey.value }, true);
 }
 </script>
