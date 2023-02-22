@@ -17,7 +17,7 @@ if (!process || !process.server) {
     }
 }
 
-export function login(identity: Identity) {
+export function login(identity: Identity, fireNew = false) {
     if (!identity.pubkey && !identity.seckey) {
         return;
     }
@@ -62,6 +62,7 @@ const auth = reactive({
     login,
     currentIdentity,
     currentProfile,
+    showProfileFormModal: ref(false)
 });
 
 export const useAuth = () => auth;

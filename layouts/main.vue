@@ -85,11 +85,16 @@
     <main role="main">
       <slot />
     </main>
+
+    <NostringModal v-model:show="auth.showProfileFormModal">
+        <NostringCard size="l">
+          <ProfileForm />
+        </NostringCard>
+      </NostringModal>
 </div>
 </template>
 
 <script setup lang="ts">
-
 import {
   HomeOutline,
   SearchOutline,

@@ -40,7 +40,7 @@
               <NostringButton round primary type="primary">Follow</NostringButton>
             </template>
             <template v-else>
-              <NostringButton round primary type="primary">Edit Profile</NostringButton>
+              <NostringButton round primary type="primary" @click="auth.showProfileFormModal = true">Edit Profile</NostringButton>
             </template>
           </div>
         </NostringSpace>
@@ -85,10 +85,6 @@
 </template>
 
 <script setup lang="ts">
-
-
-
-
 import {
   FlashOutline,
   MailOutline,
