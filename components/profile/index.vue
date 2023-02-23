@@ -40,7 +40,7 @@
               <NostringButton round primary type="primary">Follow</NostringButton>
             </template>
             <template v-else>
-              <NostringButton round primary type="primary" @click="auth.showProfileFormModal = true">Edit Profile</NostringButton>
+              <NostringButton round primary @click="auth.showProfileFormModal = true">Edit Profile</NostringButton>
             </template>
           </div>
         </NostringSpace>
