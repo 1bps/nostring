@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="primary">
     <ClientOnly>
-      <Timeline :note="notes" :show-replyings="true" />
+      <Timeline :notes="notes" :show-replyings="true" />
     </ClientOnly>
 </NuxtLayout>
 </template>
