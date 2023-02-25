@@ -56,7 +56,7 @@
         </NuxtLink>
       </nav>
 
-      <nav style="position:absolute; bottom: 10px">
+      <nav v-if="auth.currentIdentity" style="position:absolute; bottom: 10px">
         <div>
           <div style="position: absolute">
             <Avatar :image-url="auth.currentProfile?.metadata?.picture" style="width: 48px;
