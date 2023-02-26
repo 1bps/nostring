@@ -14,10 +14,11 @@
 </template>
 
 <script setup lang="ts">
-
 import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools'
 
 const auth = useAuth();
+
+const emit = defineEmits(['update', 'close']);
 
 const privateKey = ref('');
 const publicKey = computed(() => privateKey.value && getPublicKey(privateKey.value));
@@ -32,5 +33,6 @@ generate();
 
 const handleStart = () => {
     auth.login({ pubkey: publicKey.value, seckey: privateKey.value }, true);
+    emit('close');
 }
 </script>

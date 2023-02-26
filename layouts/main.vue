@@ -88,7 +88,7 @@
 
     <NostringModal v-model:show="auth.showProfileFormModal">
         <NostringCard size="l">
-          <ProfileForm />
+          <ProfileForm @close="auth.showProfileFormModal = false" />
         </NostringCard>
       </NostringModal>
 </div>
