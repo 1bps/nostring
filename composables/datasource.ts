@@ -119,6 +119,8 @@ let subEventHandler = (event: Event) => {
             // global
             let cachedGlobal = getCacheArray(notesCache, '');
 
+            let cachedOfProfile = getCacheArray(noteOfProfileCache, event.pubkey);
+
             if (event.tags) {
                 let eventTags = event.tags
                     .filter(tag => tag && tag.length >= 2 && tag[0] === 'e')
@@ -155,6 +157,10 @@ let subEventHandler = (event: Event) => {
                 if (cachedGlobal.data.value.indexOf(noteModel) == -1) {
                     cachedGlobal.data.value.push(noteModel);
                 }
+            }
+
+            if (cachedOfProfile.data.value.indexOf(noteModel) == -1) {
+                cachedOfProfile.data.value.push(noteModel);
             }
         } else if (event.kind === Kind.Contacts) {
             let cached = getContactsCached(event.pubkey);
