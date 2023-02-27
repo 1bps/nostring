@@ -19,8 +19,7 @@
     <template v-if="!verifiedWithName && showDetail">
       {{ profile?.metadata?.nip05?.replace('_@', "") }}
     </template>
-
-</NostringText>
+  </NostringText>
 </template>
 
 <script setup lang="ts">
@@ -67,7 +66,6 @@ const verifiedWithName = computed(
         #93108c 25px,
         #937410 40px,
         #179510 55px);
-    mix-blend-mode: difference;
     position: relative;
 
     &::before {
