@@ -2,7 +2,9 @@ import {
     SimplePool,
     Kind,
     nip05,
-    nip19
+    nip19,
+    getEventHash,
+    signEvent
 } from "nostr-tools";
 
 import { createProfileModel, ProfileModel } from "@/composables/model/profile";
@@ -12,13 +14,14 @@ import { EventModel } from "./model/event";
 import { Ref } from "nuxt/dist/app/compat/capi";
 import { ContactsModel, createContactsModel } from "./model/contacts";
 import { EventTagEvent } from "./model/event/tag";
+import { Identity } from "./user-config";
 
 const pool = new SimplePool();
 
 const DEFAULT_RELAYS = [
     "wss://nostr.zebedee.cloud",
     "wss://nostr.bingtech.tk",
-    "wss://nostr-pub.semisol.dev",
+    // "wss://nostr-pub.semisol.dev",
     "wss://relay.1bps.io",
     "wss://relay.damus.io",
     "wss://relay.nostr.info",
@@ -307,6 +310,29 @@ const getReplies = (hex: string): Cached<NoteModel[]> => {
     });
 }
 
+const updateProfile = (content: string, identity: Identity, cb: any): boolean => {
+    let pubkey = identity?.pubkey as string;
+    let event: Event = {
+        kind: Kind.Metadata,
+        pubkey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [],
+        content
+    }
+
+    console.log('prepare event:', event);
+    event.id = getEventHash(event);
+    event.sig = signEvent(event, identity?.seckey as string);
+
+    let pubs = pool.publish([...DEFAULT_RELAYS], event);
+    pubs.forEach(pub => {
+        pub.on('ok', () => {
+            console.log('profile updated.')
+        });
+    })
+    return true;
+}
+
 const datasource = {
     checkNip05,
     getProfile,
@@ -316,6 +342,7 @@ const datasource = {
     getNote,
     getContacts,
     getReplies,
+    updateProfile
 }
 
 export default datasource;
