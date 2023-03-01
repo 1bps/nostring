@@ -12,7 +12,7 @@
                 <slot name="message" />
             </div>
         </label>
-    </div>
+</div>
 </template>
 
 <style lang="scss">
@@ -48,6 +48,12 @@
             display: none;
         }
 
+        input,
+        textarea,
+        select,
+        radio,
+        checkbox,
+        button,
         input {
             padding: 15px 18px 5px;
             border-radius: 5px;
@@ -75,6 +81,10 @@
                 border-color: rgba(16, 87, 149, 1);
                 box-shadow: 0 0 0 .25rem rgba(16, 87, 149, .667);
             }
+        }
+
+        textarea{
+            resize: vertical;
         }
     }
 

@@ -31,7 +31,7 @@
         <NostringFormItem>
             <template #label>Bio</template>
 
-            <input v-model.trim="model.about" placeholder="" />
+            <textarea v-model.trim="model.about" placeholder="" />
         </NostringFormItem>
         <NostringFormItem>
             <template #label>NIP-05</template>
