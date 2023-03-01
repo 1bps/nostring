@@ -18,8 +18,10 @@
         </NostringFormItem>
         <NostringFormItem>
             <template #label>Avatar Picture URL</template>
-
+            
             <input v-model.trim="model.picture" placeholder="" />
+
+            <template #description>The best picture is a square.</template>
         </NostringFormItem>
         <NostringFormItem>
             <template #label>Banner Picture URL</template>
@@ -35,11 +37,29 @@
             <template #label>NIP-05</template>
 
             <input v-model.trim="model.nip05" placeholder="" />
+
+            <template #description>
+                <template v-if="model.nip05?.match(/(?:[A-Za-z0-9-_]+@)?(\w+\.)+[A-Z-a-z]{2,}/)">
+                    Using {{ model.nip05 }} as NIP-05 Identity.
+                </template>
+                <template v-else>
+                    NIP-05 Identity should be like a email address.
+                </template>
+            </template>
         </NostringFormItem>
         <NostringFormItem>
             <template #label>LUD-16</template>
 
             <input v-model.trim="model.lud16" placeholder="someone@getalby.com" />
+
+            <template #description>
+                <template v-if="model.lud16?.match(/(?:[A-Za-z0-9-_]+@)?(\w+\.)+[A-Z-a-z]{2,}/) || model.lud16?.match(/I\w+/i)">
+                    Looks well.
+                </template>
+                <template v-else>
+                    LUD-16 Identity should be like a email address.
+                </template>
+            </template>
         </NostringFormItem>
         <NostringSpace justify="end">
             <NostringButton type="primary" round @click="handleSave">Save Profile</NostringButton>
@@ -48,6 +68,8 @@
 </template>
 
 <script setup lang="ts">
+import {nip05} from 'nostr-tools';
+
 const auth = useAuth();
 
 const model = ref<any>({});
