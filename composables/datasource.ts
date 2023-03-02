@@ -18,14 +18,11 @@ import { Identity } from "./user-config";
 
 const pool = new SimplePool();
 
+const pool2 = new SimplePool();
+
 const DEFAULT_RELAYS = [
-    "wss://nostr.zebedee.cloud",
-    "wss://nostr.bingtech.tk",
-    // "wss://nostr-pub.semisol.dev",
     "wss://relay.1bps.io",
-    "wss://relay.damus.io",
-    "wss://relay.nostr.info",
-    "wss://relay.snort.social",
+    "wss://relay.damus.io"
 ];
 
 const profileCache: any = {};
@@ -64,13 +61,16 @@ let getCacheData = <T>(cache: any, key: string,
     handler: CacheHandler<T>): Cached<T> => {
     let cached = cache[key];
     if (!cached) {
-        cached = { data: ref<T>(handler.create()), expiredAt: Date.now() };
+        cached = { data: ref<T>(handler.create()), expiredAt: Date.now() - 1e3};
         cache[key] = cached;
     }
+    
     if (cached.expiredAt < 0 || cached.expiredAt <= Date.now()) {
         if (process.client && !cached.loading) {
-            cached.loading = true;
-            handler.update && handler.update(key, cached);
+            if(handler.update){
+                cached.loading = true;
+                handler.update(key,cached);
+            }
         }
     }
     return cached;
@@ -160,7 +160,6 @@ let subEventHandler = (event: Event) => {
             // anti spam
             if (!isFlood(noteModel)) {
                 if (cachedGlobal.data.value.indexOf(noteModel) == -1) {
-                    console.log(noteModel);
                     cachedGlobal.data.value.push(noteModel);
                 }
             }
@@ -194,6 +193,7 @@ const checkNip05 = (pubkey: string, identity: string): Cached<string> => {
                 cached.data.value = 'fail';
             }).finally(() => {
                 cached.expiredAt = Date.now() + 1000 * 60 * 5;
+                cached.loading = false;
             });
         }
     });
@@ -232,11 +232,10 @@ const getNotes = (): Cached<NoteModel[]> => {
 const getNotesOfPubkey = (pubkey: string): Cached<NoteModel[]> => {
     return getCacheArray(noteOfProfileCache, pubkey, (key, cached) => {
         let relays = [...DEFAULT_RELAYS];
-        let sub = pool.sub(relays, [{
+        let sub = pool2.sub(relays, [{
             kinds: [Kind.Text],
             authors: [pubkey],
         }]);
-
         sub.on("event", subEventHandler);
         sub.on("eose", () => {
             // sub.unsub();

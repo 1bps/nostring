@@ -2,8 +2,7 @@
   <NuxtLayout name="primary">
     <ClientOnly>
       <Profile :profile="profile" />
-      <Timeline :notes="notes.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))"
-        :show-replyings="true" />
+      <Timeline :notes="notes.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))" :show-replyings="true"/>
     </ClientOnly>
 </NuxtLayout>
 </template>
@@ -34,5 +33,6 @@ let hex = "";
 }
 
 const { data: profile } = datasource.getProfile(hex);
+
 const { data: notes } = datasource.getNotesOfPubkey(hex);
 </script>
