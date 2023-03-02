@@ -11,7 +11,7 @@ const holder = ref({
     currentIdentityIndex: -1,
 });
 
-if (!process || !process.server) {
+if (process.client) {
     let settings = localStorage.getItem("nostring");
     if (settings) {
         holder.value = { ...JSON.parse(settings) };
@@ -34,7 +34,7 @@ export function login(identity: Identity, fireNew = false) {
 }
 
 function save() {
-    if (!process || !process.server) {
+    if (process.client) {
         localStorage.setItem("nostring", JSON.stringify(holder.value));
     }
 }
