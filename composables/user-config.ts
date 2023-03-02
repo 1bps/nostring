@@ -35,7 +35,7 @@ export function login(identity: Identity, fireNew = false) {
 
 function save() {
     if (!process || !process.server) {
-        localStorage.setItem("nostring", JSON.stringify(holder));
+        localStorage.setItem("nostring", JSON.stringify(holder.value));
     }
 }
 
