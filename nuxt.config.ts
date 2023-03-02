@@ -9,6 +9,6 @@ export default defineNuxtConfig({
         }
     },
     build: {
-        transpile: [({ isDev }) => isDev && 'nostr-tools']
+        transpile: [({ isDev }) => isDev ? false : 'nostr-tools']
     }
 })
