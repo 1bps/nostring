@@ -1,6 +1,6 @@
 import { nip19, Event } from "nostr-tools";
 import { createEventModel, EventModel } from "./event";
-import { Ref } from "nuxt/dist/app/compat/capi";
+import { Ref } from "vue";
 import { ContactsModel } from "./contacts";
 
 export interface ProfileModel extends EventModel {
