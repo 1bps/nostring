@@ -3,8 +3,6 @@ import {
     Kind,
     nip05,
     nip19,
-    getEventHash,
-    signEvent,
     UnsignedEvent,
     finishEvent
 } from "nostr-tools";
@@ -162,6 +160,7 @@ let subEventHandler = (event: Event) => {
             // anti spam
             if (!isFlood(noteModel)) {
                 if (cachedGlobal.data.value.indexOf(noteModel) == -1) {
+                    console.log(noteModel);
                     cachedGlobal.data.value.push(noteModel);
                 }
             }
