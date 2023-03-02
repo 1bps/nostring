@@ -68,7 +68,7 @@ let getCacheData = <T>(cache: any, key: string,
         cache[key] = cached;
     }
     if (cached.expiredAt < 0 || cached.expiredAt <= Date.now()) {
-        if (process.client && !cached.loading) {
+        if (!process || process.client && !cached.loading) {
             cached.loading = true;
             handler.update && handler.update(key, cached);
         }
@@ -200,7 +200,7 @@ const checkNip05 = (pubkey: string, identity: string): Cached<string> => {
 
 const getProfile = (pubkey: string): Cached<ProfileModel> => {
     return getProfileCached(pubkey, (key, cached) => {
-        if (process.client) {
+        if (!process || process.client) {
             let relays = [...DEFAULT_RELAYS];
             let sub = pool.sub(relays, [{
                 kinds: [Kind.Metadata],
