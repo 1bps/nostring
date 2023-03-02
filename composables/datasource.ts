@@ -333,6 +333,42 @@ const updateProfile = (content: string, identity: Identity, cb: any): boolean =>
     return true;
 }
 
+const addContact = (profilePubkey: string, identity: Identity, cb: any): boolean => {
+    let pubkey = identity?.pubkey as string;
+    let contacts = getContacts(pubkey);
+
+    let existList = contacts?.data?.value?.list || [];
+
+    if(existList.some(e=>e.id == profilePubkey)){
+        // following
+        return true;
+    }
+
+    let event: Event = {
+        kind: Kind.Contacts,
+        pubkey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [['p', profilePubkey], ...contacts?.data?.value?.event?.tags|| []],
+        content:""
+    }
+
+    console.log('prepare event:', event);
+    event.id = getEventHash(event);
+    event.sig = signEvent(event, identity?.seckey as string);
+
+    let pubs = pool.publish([...DEFAULT_RELAYS], event);
+    pubs.forEach(pub => {
+        pub.on('ok', () => {
+            console.log('profile updated.')
+        });
+    })
+    return true;
+}
+
+const publishEvent = (event:Event)=>{
+
+}
+
 const datasource = {
     checkNip05,
     getProfile,
@@ -342,7 +378,8 @@ const datasource = {
     getNote,
     getContacts,
     getReplies,
-    updateProfile
+    updateProfile,
+    addContact
 }
 
 export default datasource;

@@ -37,7 +37,7 @@
                   </NostringIcon>
                 </template>
               </NostringButton>
-              <NostringButton v-if="!following" round primary type="primary">Follow</NostringButton>
+              <NostringButton v-if="!following" round primary type="primary" @click="handleFollow">Follow</NostringButton>
               <NostringButton v-if="following" round type="primary">Unfollow</NostringButton>
             </template>
             <template v-else>
@@ -117,6 +117,12 @@ const followingMe = computed(()=>props.profile.contacts?.list?.some(etp=>etp.id 
 const following = computed(()=>auth.currentProfile?.contacts?.list?.some(etp=>etp.id == props.profile?.pubkey));
 
 const isMe = computed(() => props.profile?.pubkey && props.profile?.pubkey === auth.currentProfile?.pubkey);
+
+const handleFollow = ()=>{
+  if(props.profile?.pubkey && auth.currentIdentity){
+    datasource.addContact(props.profile?.pubkey, auth.currentIdentity, ()=>{});
+  }
+}
 </script>
 
 <style lang="scss">
