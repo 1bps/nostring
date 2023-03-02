@@ -37,14 +37,18 @@
                   </NostringIcon>
                 </template>
               </NostringButton>
-              <NostringButton round primary type="primary">Follow</NostringButton>
+              <NostringButton v-if="!following" round primary type="primary">Follow</NostringButton>
+              <NostringButton v-if="following" round type="primary">Unfollow</NostringButton>
             </template>
             <template v-else>
               <NostringButton round primary @click="auth.showProfileFormModal = true">Edit Profile</NostringButton>
             </template>
           </div>
         </NostringSpace>
-        <NameDisplay header :profile="profile" />
+        <NostringSpace>
+          <NameDisplay header :profile="profile" />
+          <NostringText v-if="followingMe" type="tertiaty">Following You</NostringText>
+        </NostringSpace>
         <NostringSpace gap="0" style="align-items: center">
           <Name :value="profile.metadata?.name || profile.pubkey?.substr(0, 12)" />
           <Nip05 v-if="profile.nip05" :profile="profile" :status="'loading'" :show-detail="true" />
@@ -107,6 +111,10 @@ const auth = useAuth();
 const followingNumber = computed(() =>
   props.profile.contacts?.list?.length
 );
+
+const followingMe = computed(()=>props.profile.contacts?.list?.some(etp=>etp.id == auth.currentProfile?.pubkey));
+
+const following = computed(()=>auth.currentProfile?.contacts?.list?.some(etp=>etp.id == props.profile?.pubkey));
 
 const isMe = computed(() => props.profile?.pubkey && props.profile?.pubkey === auth.currentProfile?.pubkey);
 </script>
