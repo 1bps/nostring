@@ -4,7 +4,9 @@ import {
     nip05,
     nip19,
     getEventHash,
-    signEvent
+    signEvent,
+    UnsignedEvent,
+    finishEvent
 } from "nostr-tools";
 
 import { createProfileModel, ProfileModel } from "@/composables/model/profile";
@@ -317,7 +319,7 @@ const getReplies = (hex: string): Cached<NoteModel[]> => {
 
 const updateProfile = (content: string, identity: Identity, cb: any): boolean => {
     let pubkey = identity?.pubkey as string;
-    let event: Event = {
+    let unsigned: UnsignedEvent = {
         kind: Kind.Metadata,
         pubkey,
         created_at: Math.floor(Date.now() / 1000),
@@ -325,17 +327,16 @@ const updateProfile = (content: string, identity: Identity, cb: any): boolean =>
         content
     }
 
-    console.log('prepare event:', event);
-    event.id = getEventHash(event);
-    event.sig = signEvent(event, identity?.seckey as string);
+    console.log('prepare event:', unsigned);
 
-    let pubs = pool.publish([...DEFAULT_RELAYS], event);
-    pubs.forEach(pub => {
-        pub.on('ok', () => {
-            console.log('profile updated.');
-            subEventHandler(event);
-        });
-    })
+    let event = finishEvent(unsigned, identity?.seckey as string);
+
+    let pub = pool.publish([...DEFAULT_RELAYS], event);
+    pub.on('ok', () => {
+        console.log('profile updated.')
+        subEventHandler(event);
+    });
+
     return true;
 }
 
@@ -350,7 +351,7 @@ const addContact = (profilePubkey: string, identity: Identity, cb: any): boolean
         return true;
     }
 
-    let event: Event = {
+    let unsigned: UnsignedEvent = {
         kind: Kind.Contacts,
         pubkey,
         created_at: Math.floor(Date.now() / 1000),
@@ -358,17 +359,13 @@ const addContact = (profilePubkey: string, identity: Identity, cb: any): boolean
         content:""
     }
 
-    console.log('prepare event:', event);
-    event.id = getEventHash(event);
-    event.sig = signEvent(event, identity?.seckey as string);
+    let event = finishEvent(unsigned, identity?.seckey as string);
 
-    let pubs = pool.publish([...DEFAULT_RELAYS], event);
-    pubs.forEach(pub => {
-        pub.on('ok', () => {
-            console.log('contacts updated.')
-            subEventHandler(event);
-        });
-    })
+    let pub = pool.publish([...DEFAULT_RELAYS], event);
+    pub.on('ok', () => {
+        console.log('contacts updated.')
+        subEventHandler(event);
+    });
     return true;
 }
 
