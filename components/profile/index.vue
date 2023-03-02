@@ -38,7 +38,7 @@
                 </template>
               </NostringButton>
               <NostringButton v-if="!following" round primary type="primary" @click="handleFollow">Follow</NostringButton>
-              <NostringButton v-if="following" round type="primary">Unfollow</NostringButton>
+              <NostringButton v-if="following" round>Unfollow</NostringButton>
             </template>
             <template v-else>
               <NostringButton round primary @click="auth.showProfileFormModal = true">Edit Profile</NostringButton>

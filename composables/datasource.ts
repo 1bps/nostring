@@ -41,6 +41,7 @@ const floodContentMap: any = {};
 interface Cached<T> {
     data: Ref<T>;
     expiredAt?: number;
+    loading?: boolean;
 }
 type CacheUpdate<T> = {
     (key: string,
@@ -67,7 +68,8 @@ let getCacheData = <T>(cache: any, key: string,
         cache[key] = cached;
     }
     if (cached.expiredAt < 0 || cached.expiredAt <= Date.now()) {
-        if (process.client) {
+        if (process.client && !cached.loading) {
+            cached.loading = true;
             handler.update && handler.update(key, cached);
         }
     }
@@ -206,6 +208,7 @@ const getProfile = (pubkey: string): Cached<ProfileModel> => {
             }]);
             sub.on("event", subEventHandler);
             sub.on("eose", () => {
+                cached.loading = false;
                 sub.unsub();
             });
         }
@@ -251,6 +254,7 @@ const getNote = (id: string): Cached<NoteModel> => {
         sub.on("event", subEventHandler);
         sub.on("eose", () => {
             sub.unsub();
+            cached.loading = false;
         });
     });
 }
@@ -266,6 +270,7 @@ const getContacts = (pubkey: string): Cached<ContactsModel> => {
         sub.on("event", subEventHandler);
         sub.on("eose", () => {
             sub.unsub();
+            cached.loading = false;
         });
     });
 }
@@ -327,7 +332,8 @@ const updateProfile = (content: string, identity: Identity, cb: any): boolean =>
     let pubs = pool.publish([...DEFAULT_RELAYS], event);
     pubs.forEach(pub => {
         pub.on('ok', () => {
-            console.log('profile updated.')
+            console.log('profile updated.');
+            subEventHandler(event);
         });
     })
     return true;
@@ -359,7 +365,8 @@ const addContact = (profilePubkey: string, identity: Identity, cb: any): boolean
     let pubs = pool.publish([...DEFAULT_RELAYS], event);
     pubs.forEach(pub => {
         pub.on('ok', () => {
-            console.log('profile updated.')
+            console.log('contacts updated.')
+            subEventHandler(event);
         });
     })
     return true;

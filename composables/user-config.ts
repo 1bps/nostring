@@ -59,10 +59,15 @@ let currentProfile = computed(() => currentIdentity.value?.pubkey
     ? datasource.getProfile(currentIdentity.value?.pubkey).data.value
     : undefined);
 
+let currentContacts = computed(()=> currentIdentity.value?.pubkey
+    ? datasource.getContacts(currentIdentity.value?.pubkey).data.value
+    : undefined);
+
 const auth = reactive({
     login,
     currentIdentity,
     currentProfile,
+    currentContacts,
     showProfileFormModal: ref(false)
 });
 
