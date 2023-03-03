@@ -30,6 +30,14 @@ export function login(identity: Identity, fireNew = false) {
         holder.value.currentIdentityIndex = 0;
     }
 
+    if(fireNew){
+        //
+        if(identity.pubkey){
+            // follow self to init contacts
+            datasource.addContact(identity.pubkey, identity, ()=>{});
+        }
+    }
+
     save();
 }
 
