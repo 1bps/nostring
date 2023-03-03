@@ -60,7 +60,7 @@
         <div>
           <div style="position: absolute">
             <Avatar :image-url="auth.currentProfile?.metadata?.picture" style="width: 48px;
-            height: 48px;" />
+              height: 48px;" />
           </div>
           <NostringSpace class="id" gap="1" vertical style="padding-left: 56px">
             <NameDisplay>{{
@@ -87,10 +87,10 @@
     </main>
 
     <NostringModal v-model:show="auth.showProfileFormModal">
-        <NostringCard size="l">
-          <ProfileForm @close="auth.showProfileFormModal = false" />
-        </NostringCard>
-      </NostringModal>
+      <NostringCard size="l">
+        <ProfileForm @close="auth.showProfileFormModal = false" />
+      </NostringCard>
+    </NostringModal>
 </div>
 </template>
 

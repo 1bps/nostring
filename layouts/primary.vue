@@ -6,10 +6,10 @@
       </div>
       <aside class="sidebar">
         <nav>
-          <NostringCard v-if="!auth.currentIdentity">
+          <NostringCard>
             <NostringSpace vertical gap="10">
               <NostringText type="primary">Start Nostring</NostringText>
-              <NostringButton round size="l">Login with npub/nsec</NostringButton>
+              <NostringButton round size="l" @click="showLoginModal = true">Login with npub/nsec</NostringButton>
               <NostringButton round size="l">Login with Nostx/Alby</NostringButton>
               <NostringButton type="primary" round size="l" @click="handleGenerate">Generate Identity</NostringButton>
             </NostringSpace>
@@ -33,7 +33,12 @@
       </aside>
       <NostringModal v-model:show="showGenModal">
         <NostringCard size="l">
-          <Generate />
+          <Generate @close="showGenModal = false"/>
+        </NostringCard>
+      </NostringModal>
+      <NostringModal v-model:show="showLoginModal">
+        <NostringCard size="l">
+          <Login @close="showLoginModal = false"/>
         </NostringCard>
       </NostringModal>
     </ClientOnly>
@@ -49,6 +54,7 @@ import { useAuth } from "~~/composables/user-config";
 const auth = useAuth();
 
 const showGenModal = ref(false);
+const showLoginModal = ref(false);
 
 const handleGenerate = () => {
   showGenModal.value = true;
