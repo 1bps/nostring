@@ -12,14 +12,16 @@
             <NostringText class="nav-item-label">Home</NostringText>
           </NostringButton>
         </NuxtLink>
-        <NostringButton size="xl" justify="flex-start" text>
-          <template #icon>
-            <NostringIcon>
-              <SearchOutline />
-            </NostringIcon>
-          </template>
-          <NostringText class="nav-item-label">Discovery</NostringText>
-        </NostringButton>
+        <NuxtLink to="/global">
+          <NostringButton size="xl" justify="flex-start" text>
+            <template #icon>
+              <NostringIcon>
+                <SearchOutline />
+              </NostringIcon>
+            </template>
+            <NostringText class="nav-item-label">Discovery</NostringText>
+          </NostringButton>
+        </NuxtLink>
         <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
@@ -60,7 +62,7 @@
         <div>
           <div style="position: absolute">
             <Avatar :image-url="auth.currentProfile?.metadata?.picture" style="width: 48px;
-              height: 48px;" />
+                height: 48px;" />
           </div>
           <NostringSpace class="id" gap="1" vertical style="padding-left: 56px">
             <NameDisplay>{{
@@ -95,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+
 import {
   HomeOutline,
   SearchOutline,
