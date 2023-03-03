@@ -5,7 +5,7 @@
 
             <input v-model.trim="key" placeholder="npub... or nsec" required />
 
-            <template #description>The name when people mention you.</template>
+            <template #description></template>
             <template #message>Name</template>
         </NostringFormItem>
 

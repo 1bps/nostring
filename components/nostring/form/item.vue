@@ -41,7 +41,7 @@
         }
 
         .description {
-            color: rgba(255, 255, 255, .5);
+            color: rgba(255, 255, 255, .333);
         }
 
         .message {
