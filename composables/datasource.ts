@@ -28,6 +28,7 @@ const DEFAULT_RELAYS = [
 const profileCache: any = {};
 const contactsCache: any = {};
 const noteOfProfileCache: any = {};
+const noteOfFollowingsCache: any = {};
 const notesCache: any = {};
 const noteCache: any = {};
 const repliesCache: any = {};
@@ -229,6 +230,20 @@ const getNotes = (): Cached<NoteModel[]> => {
     });
 }
 
+const getNotesOfFollowings = (pubkey: string, followings: string[]): Cached<NoteModel[]> => {
+    return getCacheArray(noteOfFollowingsCache, pubkey, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool2.sub(relays, [{
+            kinds: [Kind.Text],
+            authors: followings,
+        }]);
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            // sub.unsub();
+        });
+    })
+}
+
 const getNotesOfPubkey = (pubkey: string): Cached<NoteModel[]> => {
     return getCacheArray(noteOfProfileCache, pubkey, (key, cached) => {
         let relays = [...DEFAULT_RELAYS];
@@ -381,7 +396,9 @@ const datasource = {
     getContacts,
     getReplies,
     updateProfile,
-    addContact
+    addContact,
+    getNotesOfFollowings
+    
 }
 
 export default datasource;
