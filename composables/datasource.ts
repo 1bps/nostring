@@ -34,6 +34,7 @@ const noteOfFollowingsCache: any = {};
 const notesCache: any = {};
 const noteCache: any = {};
 const repliesCache: any = {};
+const reactionsOfNoteCache: any = {};
 const eventCache: any = {};
 const nip05Cache: any = {};
 const floodContentMap: any = {};
@@ -175,6 +176,13 @@ let subEventHandler = (event: Event) => {
             let contactsModel = createContactsModel(event).value;
             cached.data.value = contactsModel;
             cached.expiredAt = Date.now() + 60 * 1000 * 5;
+        }else if (event.kind === Kind.Reaction) {
+            event.tags
+                .filter(t=>t && t.length >= 2 && t[0] == 'e')
+                .forEach(t=>{
+                    let cachedOfNote = getCacheArray(reactionsOfNoteCache, event.pubkey);
+                    // TODO
+                })
         }
     } catch (e) {
         console.log('error when handle event', e);
@@ -327,7 +335,21 @@ const getReplies = (hex: string): Cached<NoteModel[]> => {
         }]);
         sub.on("event", subEventHandler);
         sub.on("eose", () => {
-            // sub.unsub();
+            sub.unsub();
+        });
+    });
+}
+
+const getReactionsOfNote = (hex: string): Cached<NoteModel[]> => {
+    return getCacheArray(reactionsOfNoteCache, hex, (key, cached) => {
+        let relays = [...DEFAULT_RELAYS];
+        let sub = pool.sub(relays, [{
+            kinds: [Kind.Reaction],
+            '#e': [hex],
+        }]);
+        sub.on("event", subEventHandler);
+        sub.on("eose", () => {
+            sub.unsub();
         });
     });
 }
@@ -399,7 +421,8 @@ const datasource = {
     getReplies,
     updateProfile,
     addContact,
-    getNotesOfFollowings
+    getNotesOfFollowings,
+    getReactionsOfNote
     
 }
 
