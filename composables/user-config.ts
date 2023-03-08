@@ -27,7 +27,7 @@ export function login(identity: Identity, fireNew = false) {
     }
     holder.value.identites.push(identity);
     if (holder.value.currentIdentityIndex < 0 && holder.value.identites.length > 0) {
-        holder.value.currentIdentityIndex = 0;
+        holder.value.currentIdentityIndex = holder.value.identites.length - 1;
     }
 
     if(fireNew){
