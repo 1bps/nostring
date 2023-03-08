@@ -21,6 +21,7 @@ export function createNoteModel(e: Event): Ref<NoteModel> {
         nip19: computed(() => e.id ? nip19.noteEncode(e.id) : ''),
         content: computed(() => e.content),
         author: computed(() => datasource.getProfile(e.pubkey).data.value),
-        replies: computed(() => e.id ? datasource.getReplies(e.id).data.value : [])
+        replies: computed(() => e.id ? datasource.getReplies(e.id).data.value : []),
+        reactions: computed(()=> e.id ? datasource.getReactionsOfNote(e.id).data.value : [])
     });
 }
