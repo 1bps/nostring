@@ -6,11 +6,11 @@
     },
   ]" style="display: inline-flex; align-items: center;">
     <NostringIcon style="overflow:hidden">
-      <CheckmarkCircle v-if="status === 'verified' && !verifiedWithName" />
-      <CheckmarkDoneCircle v-if="status === 'verified' && verifiedWithName" />
-      <HelpCircle v-if="status === 'loading'" />
-      <Warning v-if="status === 'fail'" />
-      <CloseCircle v-if="status === 'fake'" />
+      <IconDiscountCheckFilled v-if="status === 'verified' && !verifiedWithName" :size="18" />
+      <IconDiscountCheckFilled v-if="status === 'verified' && verifiedWithName" :size="18" />
+      <IconQuestionCircle v-if="status === 'loading'" :size="18" />
+      <IconAlertCircleFilled v-if="status === 'fail'" :size="18" />
+      <IconCircleXFilled v-if="status === 'fake'" :size="18" />
       <span v-if="verifiedWithName && showDetail">@</span>
     </NostringIcon>
     <template v-if="verifiedWithName && showDetail">
@@ -24,13 +24,16 @@
 
 <script setup lang="ts">
 import {
-  Warning,
-  ShieldCheckmark,
-  CheckmarkCircle,
-  CheckmarkDoneCircle,
-  CloseCircle,
-  HelpCircle,
-} from "@vicons/ionicons5";
+  IconDiscountCheck,
+  IconDiscountCheckFilled,
+  IconCircleCheck,
+  IconCircleCheckFilled,
+  IconAlertCircle,
+  IconAlertCircleFilled,
+  IconCircleX,
+  IconCircleXFilled,
+  IconQuestionCircle
+} from '@tabler/icons-vue';
 import { ProfileModel } from "~~/composables/model/profile";
 
 interface Props {

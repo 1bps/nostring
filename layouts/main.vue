@@ -6,7 +6,7 @@
           <NostringButton size="xl" justify="flex-start" text>
             <template #icon>
               <NostringIcon>
-                <HomeOutline />
+                <IconHome :size="18" />
               </NostringIcon>
             </template>
             <NostringText class="nav-item-label">Home</NostringText>
@@ -16,7 +16,7 @@
           <NostringButton size="xl" justify="flex-start" text>
             <template #icon>
               <NostringIcon>
-                <SearchOutline />
+                <IconSearch :size="18" />
               </NostringIcon>
             </template>
             <NostringText class="nav-item-label">Discovery</NostringText>
@@ -25,7 +25,7 @@
         <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
-              <MailOutline />
+              <IconMail :size="18" />
             </NostringIcon>
           </template>
           <NostringText class="nav-item-label">Messages</NostringText>
@@ -33,7 +33,7 @@
         <NostringButton size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
-              <PeopleOutline />
+              <IconUsers />
             </NostringIcon>
           </template>
           <NostringText class="nav-item-label">Channels</NostringText>
@@ -41,7 +41,7 @@
         <NostringButton v-if="auth.currentIdentity" size="xl" justify="flex-start" text>
           <template #icon>
             <NostringIcon>
-              <NotificationsOutline />
+              <IconBell :size="18"/>
             </NostringIcon>
           </template>
           <NostringText class="nav-item-label">Notifications</NostringText>
@@ -50,7 +50,7 @@
           <NostringButton size="xl" justify="flex-start" text>
             <template #icon>
               <NostringIcon>
-                <PersonOutline />
+                <IconUser :size="18" />
               </NostringIcon>
             </template>
             <NostringText class="nav-item-label">Profile</NostringText>
@@ -62,7 +62,7 @@
         <div>
           <div style="position: absolute">
             <Avatar :image-url="auth.currentProfile?.metadata?.picture" style="width: 48px;
-                height: 48px;" />
+                    height: 48px;" />
           </div>
           <NostringSpace class="id" gap="1" vertical style="padding-left: 56px">
             <NameDisplay>{{
@@ -93,19 +93,18 @@
         <ProfileForm @close="auth.showProfileFormModal = false" />
       </NostringCard>
     </NostringModal>
-</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-
 import {
-  HomeOutline,
-  SearchOutline,
-  MailOutline,
-  NotificationsOutline,
-  PeopleOutline,
-  PersonOutline
-} from "@vicons/ionicons5";
+  IconHome,
+  IconSearch,
+  IconMail,
+  IconBell,
+  IconUser,
+  IconUsers
+} from '@tabler/icons-vue';
 
 const auth = useAuth();
 </script>
