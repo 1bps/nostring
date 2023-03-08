@@ -23,7 +23,7 @@ const pool2 = new SimplePool();
 const DEFAULT_RELAYS = [
     "wss://relay.1bps.io",
     "wss://relay.damus.io",
-    "wss://relay.snort.social",
+    // "wss://relay.snort.social",
     "wss://relay.nostr.info"
 ];
 
@@ -232,6 +232,7 @@ const getNotes = (): Cached<NoteModel[]> => {
         let relays = [...DEFAULT_RELAYS];
         let sub = pool.sub(relays, [{
             kinds: [Kind.Text],
+            limit: 10,
         }]);
         sub.on("event", subEventHandler);
         sub.on("eose", () => {
@@ -410,6 +411,29 @@ const publishEvent = (event:Event)=>{
 
 }
 
+const publishContent = (content: string, identity: Identity, cb: any): boolean => {
+    let pubkey = identity?.pubkey as string;
+    let unsigned: UnsignedEvent = {
+        kind: Kind.Text,
+        pubkey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [],
+        content
+    }
+
+    console.log('prepare event:', unsigned);
+
+    let event = finishEvent(unsigned, identity?.seckey as string);
+
+    let pub = pool.publish([...DEFAULT_RELAYS], event);
+    pub.on('ok', () => {
+        console.log('published')
+        subEventHandler(event);
+    });
+
+    return true;
+}
+
 const datasource = {
     checkNip05,
     getProfile,
@@ -422,7 +446,8 @@ const datasource = {
     updateProfile,
     addContact,
     getNotesOfFollowings,
-    getReactionsOfNote
+    getReactionsOfNote,
+    publishContent
     
 }
 

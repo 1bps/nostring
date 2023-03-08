@@ -56,6 +56,7 @@
             <NostringText class="nav-item-label">Profile</NostringText>
           </NostringButton>
         </NuxtLink>
+        <NostringButton v-if="auth.currentIdentity" type="primary" round size="l" @click="showComposeModal = true">Compose</NostringButton>
       </nav>
 
       <nav v-if="auth.currentIdentity" style="position:absolute; bottom: 10px">
@@ -93,6 +94,12 @@
         <ProfileForm @close="auth.showProfileFormModal = false" />
       </NostringCard>
     </NostringModal>
+
+    <NostringModal v-model:show="showComposeModal">
+      <NostringCard size="l">
+        <Compose @close="showComposeModal = false" />
+      </NostringCard>
+    </NostringModal>
   </div>
 </template>
 
@@ -107,6 +114,8 @@ import {
 } from '@tabler/icons-vue';
 
 const auth = useAuth();
+
+const showComposeModal = ref(false);
 </script>
 
 <style lang="scss">
