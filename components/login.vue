@@ -12,11 +12,11 @@
         <NostringSpace justify="flex-end">
             <NostringButton type="primary" round @click="handleStart">Start Nostring</NostringButton>
         </NostringSpace>
-</NostringForm>
+    </NostringForm>
 </template>
 
 <script setup lang="ts">
-import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools'
+import { getPublicKey, nip19 } from 'nostr-tools'
 
 const auth = useAuth();
 
@@ -29,10 +29,10 @@ const handleStart = () => {
     if (k.type == 'npub') {
         auth.login({ pubkey: k.data as string }, false);
         emit('close');
-    }else if (k.type == 'nsec') {
+    } else if (k.type == 'nsec') {
         let seckey = k.data as string;
         let pubkey = getPublicKey(seckey);
-        auth.login({ pubkey, seckey  }, false);
+        auth.login({ pubkey, seckey }, false);
         emit('close');
     } else {
 
