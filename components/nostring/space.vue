@@ -8,6 +8,7 @@
     :style="{
       gap: gap ? `${gap}px` : undefined,
       justifyContent: justify,
+      alignItems: align
     }"
   >
     <slot>{{ content }} </slot>
@@ -21,6 +22,7 @@ interface Props {
   gap?: string;
   justify?: string;
   inline?: boolean;
+  align?:string;
 }
 
 const props = withDefaults(defineProps<Props>(), {

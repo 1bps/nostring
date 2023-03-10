@@ -45,9 +45,9 @@
             </template>
           </div>
         </NostringSpace>
-        <NostringSpace>
+        <NostringSpace align="center">
           <NameDisplay header :profile="profile" />
-          <NostringText v-if="followingMe" type="tertiaty">Following You</NostringText>
+          <NostringText v-if="followingMe" type="tertiary">Following You</NostringText>
         </NostringSpace>
         <NostringSpace gap="0" style="align-items: center">
           <Name :value="profile.metadata?.name || profile.pubkey?.substr(0, 12)" />
