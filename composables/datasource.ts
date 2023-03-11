@@ -122,7 +122,12 @@ let subEventHandler = (event: Event) => {
                 return;
             }
             let cached = getNoteCached(event.id);
-            let noteModel = createNoteModel(event).value;
+            if(cached.data.value?.createdAt){
+                
+            }
+            let noteModel = cached.data.value?.createdAt 
+                ? cached.data.value 
+                : createNoteModel(event).value;
             cached.data.value = noteModel;
             cached.expiredAt = Date.now() + 60 * 1000 * 5;
             // global
