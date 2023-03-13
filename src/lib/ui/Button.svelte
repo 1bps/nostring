@@ -5,10 +5,10 @@
     export let round = false;
     export let block = false;
     export let text = false;
-    export let type = "";
+    export let type = "default";
     export let size = "m";
     export let justify = "";
-    export let tag = "";
+    export let tag = "button";
 
     const dispath = createEventDispatcher();
 
@@ -19,7 +19,7 @@
 
 <button
     type="button"
-    class={["ns-button", `ns-button-${size}`].join(" ")}
+    class={["ns-button", `ns-button-${size}`, `ns-button-${type}`].join(" ")}
     on:click={onclick}
 >
     <slot name="icon" />
@@ -55,12 +55,12 @@
         color: var(--button-text-color);
         background-color: var(--button-bg-color);
 
-        &.ns-button-size-xl {
+        &.ns-button-xl {
             --button-height: 48px;
             font-size: 100%;
         }
 
-        &.ns-button-size-l {
+        &.ns-button-l {
             --button-height: 40px;
             font-size: 100%;
         }
@@ -70,16 +70,16 @@
             padding: 0 20px;
         }
 
-        &.ns-button-type-default {
+        &.ns-button-default {
             border: 1px solid var(--text-color-tertiary);
         }
 
-        &.ns-button-type-tertiary {
+        &.ns-button-tertiary {
             --button-text-color: var(--text-color-tertiary);
             border: 1px solid var(--text-color-tertiary);
         }
 
-        &.ns-button-type-primary {
+        &.ns-button-primary {
             --button-text-color: var(--text-color-primary);
             --button-bg-color: #105795;
         }
@@ -97,10 +97,10 @@
             }
         }
 
-        &.ns-button-type-warning {
+        &.ns-button-warning {
         }
 
-        &.ns-button-type-error {
+        &.ns-button-error {
         }
 
         .ns-button-content {
