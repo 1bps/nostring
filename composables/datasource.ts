@@ -23,7 +23,7 @@ const pool2 = new SimplePool();
 const DEFAULT_RELAYS = [
     "wss://relay.1bps.io",
     "wss://relay.damus.io",
-    // "wss://relay.snort.social",
+    "wss://relay.snort.social",
     "wss://relay.nostr.info"
 ];
 
@@ -122,7 +122,12 @@ let subEventHandler = (event: Event) => {
                 return;
             }
             let cached = getNoteCached(event.id);
-            let noteModel = createNoteModel(event).value;
+            if(cached.data.value?.createdAt){
+                
+            }
+            let noteModel = cached.data.value?.createdAt 
+                ? cached.data.value 
+                : createNoteModel(event).value;
             cached.data.value = noteModel;
             cached.expiredAt = Date.now() + 60 * 1000 * 5;
             // global
