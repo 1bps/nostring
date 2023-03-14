@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
+    import Icon from "./Icon.svelte";
 
     export let label = "";
     export let round = false;
@@ -17,16 +18,27 @@
     }
 </script>
 
-<button
+<svelte:element
+    this={tag}
     type="button"
+    class:ns-button-round={round}
+    class:ns-button-text={text}
+    class:ns-block={block}
     class={["ns-button", `ns-button-${size}`, `ns-button-${type}`].join(" ")}
+    style:justify-content={justify}
     on:click={onclick}
 >
-    <slot name="icon" />
-    <span class="ns-button-content">
-        <slot>{label}</slot>
-    </span>
-</button>
+    {#if $$slots.icon}
+        <Icon>
+            <slot name="icon" />
+        </Icon>
+    {/if}
+    {#if $$slots.default}
+        <span class="ns-button-content">
+            <slot>{label}</slot>
+        </span>
+    {/if}
+</svelte:element>
 
 <style lang="scss">
     .ns-button {
