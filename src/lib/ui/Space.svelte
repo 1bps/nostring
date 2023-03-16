@@ -15,7 +15,7 @@
     style:justify-content={justify}
     style:align-items={align}
 >
-    <slot>{{ content }}</slot>
+    <slot>{content}</slot>
 </div>
 
 <style lang="scss">

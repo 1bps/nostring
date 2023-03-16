@@ -9,7 +9,7 @@
     class:ns-text-ellipsis={ellipsis}
     class={["ns-text", `ns-text-${type}`, `ns-text-${size}`].join(" ")}
 >
-    <slot>{{ content }}</slot>
+    <slot>{content}</slot>
 </span>
 
 <style lang="scss">
