@@ -1,10 +1,10 @@
 <script lang="ts">
     export let content: string = "";
-    export let vertical: boolean;
-    export let inline: boolean;
-    export let gap: number;
-    export let justify: string;
-    export let align: string;
+    export let vertical: boolean = false;
+    export let inline: boolean = false;
+    export let gap: number = 0;
+    export let justify: string = "start";
+    export let align: string = "center";
 </script>
 
 <div

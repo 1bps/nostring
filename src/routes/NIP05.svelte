@@ -8,7 +8,7 @@
         IconAlertCircleFilled,
         IconCircleX,
         IconCircleXFilled,
-        IconQuestionCircle,
+        IconMessageCircleQuestion,
     } from "@tabler/icons-svelte";
     import type { ProfileModel } from "$lib/model/profile";
     import Text from "$lib/ui/Text.svelte";
@@ -43,7 +43,7 @@
                 <IconDiscountCheckFilled size={18} />
             {/if}
         {:else if status === "loading"}
-            <IconQuestionCircle size={18} />
+            <IconMessageCircleQuestion size={18} />
         {:else if status === "fail"}
             <IconAlertCircleFilled size={18} />
         {:else if status === "fake"}
