@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { getPublicKey } from "nostr-tools";
 import { get, readable, writable, type Readable } from "svelte/store";
 import type { ProfileModel } from "./model/profile";
@@ -12,7 +13,7 @@ const holder = writable({
     currentIdentityIndex: -1,
 });
 
-if (process.client) {
+if (browser) {
     let settings = localStorage.getItem("nostring");
     if (settings) {
         holder.set({ ...JSON.parse(settings) });
@@ -44,7 +45,7 @@ export function login(identity: Identity, fireNew = false) {
 }
 
 function save() {
-    if (process.client) {
+    if (browser) {
         localStorage.setItem("nostring", JSON.stringify(get(holder)));
     }
 }

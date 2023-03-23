@@ -5,15 +5,20 @@
     export let gap: number = 0;
     export let justify: string = "start";
     export let align: string = "center";
+
+    let classNames = "";
+    export const style: string = "";
+    export { classNames as class };
 </script>
 
 <div
-    class="ns-space"
+    class={["ns-space", classNames].join(" ")}
     class:ns-vertical={vertical}
     class:ns-inline={inline}
     style:gap={gap ? `${gap}px` : undefined}
     style:justify-content={justify}
     style:align-items={align}
+    {style}
 >
     <slot>{content}</slot>
 </div>

@@ -23,7 +23,7 @@
 <Space
     gap={0}
     style="padding: 5px 10px; background: #111; border-radius: 5px; margin-top: 10px; cursor: pointer"
-    @click="clickHandler"
+    on:click={clickHandler}
 >
     <Text type="tertiary" style="margin-right: 3px">
         <Icon>
