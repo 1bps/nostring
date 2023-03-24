@@ -11,6 +11,10 @@
     export let justify = "";
     export let tag = "button";
 
+    let classNames = "";
+    export let style: string = "";
+    export { classNames as class };
+
     const dispath = createEventDispatcher();
 
     function onClick(event: any) {
@@ -24,9 +28,15 @@
     class:ns-button-round={round}
     class:ns-button-text={text}
     class:ns-block={block}
-    class={["ns-button", `ns-button-${size}`, `ns-button-${type}`].join(" ")}
+    class={[
+        classNames,
+        "ns-button",
+        `ns-button-${size}`,
+        `ns-button-${type}`,
+    ].join(" ")}
     style:justify-content={justify}
-    on:click={onclick}
+    {style}
+    on:click={onClick}
 >
     {#if $$slots.icon}
         <Icon>

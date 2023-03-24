@@ -8,16 +8,17 @@
 
     let timeout: any;
 
-    $: copied = false;
+    let copied = false;
 
-    const clickHandler = () => {
+    function clickHandler(event: any) {
+        console.log("clickHandler");
         navigator.clipboard.writeText(nip19);
         copied = true;
         if (timeout) {
             clearTimeout(timeout);
         }
         timeout = setTimeout(() => (copied = false), 5000);
-    };
+    }
 </script>
 
 <Space
@@ -30,9 +31,9 @@
             <IconKey />
         </Icon>
     </Text>
-    <Text type="tertiary">{nip19?.substr(0, 4)}</Text>
+    <Text type="tertiary">{nip19?.substring(0, 4)}</Text>
     <Text type="tertiary" ellipsis style="flex-shrink: 1">
-        {nip19?.substr(4, nip19?.length - 32)}
+        {nip19?.substring(4, nip19?.length - 28)}
     </Text>
     <Text type="tertiary">{nip19?.substring(nip19?.length - 16)}</Text>
     <Text

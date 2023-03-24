@@ -141,8 +141,9 @@
                             type="primary"
                             round
                             size="l"
-                            on:click={() => (showGenModal = true)}
-                            >Generate Identity</Button
+                            on:click={() => {
+                                showGenModal = true;
+                            }}>Generate Identity</Button
                         >
                     </Space>
                 </Card>
@@ -161,12 +162,12 @@
                 </Space>
             </footer>
         </aside>
-        <Modal show={showGenModal}>
+        <Modal bind:show={showGenModal}>
             <Card size="l">
                 <GenerateKeys on:close={() => (showGenModal = false)} />
             </Card>
         </Modal>
-        <Modal show={showLoginModal}>
+        <Modal bind:show={showLoginModal}>
             <Card size="l">
                 <Login on:close={() => (showLoginModal = false)} />
             </Card>

@@ -1,24 +1,33 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
+
     export let content: string = "";
     export let vertical: boolean = false;
     export let inline: boolean = false;
-    export let gap: number = 0;
+    export let gap: number = 5;
     export let justify: string = "start";
     export let align: string = "center";
 
     let classNames = "";
-    export const style: string = "";
+    export let style: string = "";
     export { classNames as class };
+
+    const dispath = createEventDispatcher();
+
+    function onClick(event: any) {
+        dispath("click", event);
+    }
 </script>
 
 <div
     class={["ns-space", classNames].join(" ")}
     class:ns-vertical={vertical}
     class:ns-inline={inline}
-    style:gap={gap ? `${gap}px` : undefined}
+    style:gap={`${gap}px`}
     style:justify-content={justify}
     style:align-items={align}
     {style}
+    on:click={onClick}
 >
     <slot>{content}</slot>
 </div>

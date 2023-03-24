@@ -3,11 +3,18 @@
     export let type: string = "default";
     export let size: string = "m";
     export let ellipsis: boolean = false;
+
+    let classNames = "";
+    export let style: string = "";
+    export { classNames as class };
 </script>
 
 <span
     class:ns-text-ellipsis={ellipsis}
-    class={["ns-text", `ns-text-${type}`, `ns-text-${size}`].join(" ")}
+    class={[classNames, "ns-text", `ns-text-${type}`, `ns-text-${size}`].join(
+        " "
+    )}
+    {style}
 >
     <slot>{content}</slot>
 </span>
