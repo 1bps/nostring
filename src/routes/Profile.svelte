@@ -1,5 +1,6 @@
 <script lang="ts">
     import Space from "$lib/ui/Space.svelte";
+    import { useAuth } from "$lib/user-config";
     import NIP05 from "./NIP05.svelte";
     import NIP19 from "./NIP19.svelte";
 
@@ -7,6 +8,29 @@
 
     export let profile: any;
     export let mini: boolean = false;
+
+    const auth = useAuth();
+    const currentProfile = $auth.currentProfile;
+
+    $: followingNumber = $profile.contacts?.list?.length;
+    // $: followingMe = $profile.contacts?.list?.some(
+    //     (etp) => etp.id == $currentProfile?.pubkey
+    // );
+    // $: following = $currentProfile?.contacts?.list?.some(
+    //     (etp) => etp.id == $profile?.pubkey
+    // );
+    $: isMe =
+        $profile?.pubkey && $profile?.pubkey === $currentProfile?.pubkey;
+
+    // const handleFollow = () => {
+    //     if ($profile?.pubkey && $currentProfile) {
+    //         datasource.addContact(
+    //             props.profile?.pubkey,
+    //             auth.currentIdentity,
+    //             () => {}
+    //         );
+    //     }
+    // };
 </script>
 
 <div class="profile">

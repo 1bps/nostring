@@ -22,6 +22,7 @@ export function createProfileModel(e: Event): Readable<ProfileModel> {
         }
         return () => { };
     });
+
     return readable({
         id,
         event,
