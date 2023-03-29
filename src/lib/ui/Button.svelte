@@ -12,14 +12,7 @@
     export let tag = "button";
 
     let classNames = "";
-    export let style: string = "";
     export { classNames as class };
-
-    const dispath = createEventDispatcher();
-
-    function onClick(event: any) {
-        dispath("click", event);
-    }
 </script>
 
 <svelte:element
@@ -35,8 +28,8 @@
         `ns-button-${type}`,
     ].join(" ")}
     style:justify-content={justify}
-    {style}
-    on:click={onClick}
+    on:click
+    {... $$restProps}
 >
     {#if $$slots.icon}
         <Icon>

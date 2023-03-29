@@ -5,8 +5,8 @@
     export let vertical: boolean = false;
     export let inline: boolean = false;
     export let gap: number = 5;
-    export let justify: string = "start";
-    export let align: string = "center";
+    export let justify: string = "";
+    export let align: string = "";
 
     let classNames = "";
     export let style: string = "";

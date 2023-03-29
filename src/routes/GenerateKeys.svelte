@@ -38,7 +38,7 @@
     <Text>This is your public key for others to identity you.</Text>
     <NIP19 nip19={npub} />
 
-    <Space justify="flex-end">
+    <Space justify="flex-end" align="end">
         <Button round on:click={generate}>Generate New One</Button>
         <Button type="primary" round on:click={handleStart}
             >Start Nostring</Button

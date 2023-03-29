@@ -8,15 +8,15 @@
         IconAlertCircleFilled,
         IconCircleX,
         IconCircleXFilled,
-        IconMessageCircleQuestion,
+        IconQuestionMark,
     } from "@tabler/icons-svelte";
     import type { ProfileModel } from "$lib/model/profile";
     import Text from "$lib/ui/Text.svelte";
     import Icon from "$lib/ui/Icon.svelte";
 
     export let profile: ProfileModel;
-    export let showDetail: boolean;
-    export let defaultStatus: string;
+    export let showDetail: boolean = true;
+    export let defaultStatus: string = "loading";
 
     $: status = profile?.nip05?.status || defaultStatus;
 
@@ -32,8 +32,11 @@
 
 <Text
     type="tertiary"
-    class:name-verified={verifiedWithName}
-    class={["nip05", `nip05-${status}`].join(" ")}
+    class={[
+        "nip05",
+        `nip05-${status}`,
+        verifiedWithName ? "name-verified" : "",
+    ].join(" ")}
 >
     <Icon style="overflow:hidden">
         {#if status === "verified"}
@@ -43,7 +46,7 @@
                 <IconDiscountCheckFilled size={18} />
             {/if}
         {:else if status === "loading"}
-            <IconMessageCircleQuestion size={18} />
+            <IconQuestionMark size={18} />
         {:else if status === "fail"}
             <IconAlertCircleFilled size={18} />
         {:else if status === "fake"}

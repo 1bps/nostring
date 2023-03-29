@@ -5,7 +5,6 @@
     export let ellipsis: boolean = false;
 
     let classNames = "";
-    export let style: string = "";
     export { classNames as class };
 </script>
 
@@ -14,7 +13,7 @@
     class={[classNames, "ns-text", `ns-text-${type}`, `ns-text-${size}`].join(
         " "
     )}
-    {style}
+    {...$$restProps}
 >
     <slot>{content}</slot>
 </span>

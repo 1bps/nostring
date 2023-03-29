@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<span class="ns-icon">
+<span class="ns-icon" {...$$restProps}>
     <slot />
 </span>
 
